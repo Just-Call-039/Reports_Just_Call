@@ -311,7 +311,8 @@ else:
     my_min = int(total_time // 60)
     my_sec = round(total_time % 60, 3)
     print(f'Общее время обработки и создания файлов составило: {my_min} мин., {my_sec} сек.')
-    telegram_send.send(messages=[f'Отчет №10 выполнен. Общее время работы составило: {my_min} мин., {my_sec} сек.'])
+    telegram_send.send(messages=[f'Отчет №10 выполнен.\n'
+                                 f'Общее время работы составило: {my_min} мин., {my_sec} сек.'])
     report.write(f'Общее время обработки и создания файлов составило: {my_min} мин., {my_sec} сек.\n')
     report.write(end)
     report.write('\n')
