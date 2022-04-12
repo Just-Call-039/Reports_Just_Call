@@ -3,6 +3,7 @@ import shutil
 import time
 import re
 import pymysql
+import telegram_send
 
 
 # Функция обработки пользователей.
@@ -105,6 +106,7 @@ end = '---------------end---------------\n'
 report.write(start)
 
 print(f'Производится подключение к БД. Начало в: {time.strftime("%X")}.')
+telegram_send.send(messages=[f'Начало работы отчета №10 в: {time.strftime("%X")}.'])
 report.write(
     f'Производится подключение к БД. Дата: {time.strftime("%d-%m-%Y")}. Время: {time.strftime("%X")}.\n')
 now_time = time.time()
@@ -185,32 +187,41 @@ try:
     print()
 
     print('Запрос из All_users.sql заносится в ДФ.')
+    report.write('Запрос из All_users.sql заносится в ДФ.\n')
     now_time = time.time()
     df_all_us = pd.read_sql_query(all_users, my_connect)
     print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
+    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
     print()
 
     print('Запрос из Super.sql заносится в ДФ.')
+    report.write('Запрос из Super.sql заносится в ДФ.\n')
     now_time = time.time()
     df_my_sup = pd.read_sql_query(my_super, my_connect)
     print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
+    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
     print()
 
     print('Запрос из Total_calls.sql заносится в ДФ.')
+    report.write('Запрос из Total_calls.sql заносится в ДФ.\n')
     now_time = time.time()
     df_total_calls = pd.read_sql_query(total_calls, my_connect)
     print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
+    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
     print()
 
     print('Запрос из Total_calls_31d.sql заносится в ДФ.')
+    report.write('Запрос из Total_calls_31d.sql заносится в ДФ.\n')
     now_time = time.time()
     df_calls_31d = pd.read_sql_query(total_calls_31d, my_connect)
     print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
+    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
     print()
 
 except:
     print('Произошла ошибка чтения SQL запросов и занесения в ДФ.')
     print()
+    telegram_send.send(messages=[f'Произошла ошибка работы отчета №10.'])
     report.write('Произошла ошибка чтения SQL запросов и занесения в ДФ.\n')
     end_time = time.time()
     total_time = end_time - start_time
@@ -300,6 +311,7 @@ else:
     my_min = int(total_time // 60)
     my_sec = round(total_time % 60, 3)
     print(f'Общее время обработки и создания файлов составило: {my_min} мин., {my_sec} сек.')
+    telegram_send.send(messages=[f'Отчет №10 выполнен. Общее время работы составило: {my_min} мин., {my_sec} сек.'])
     report.write(f'Общее время обработки и создания файлов составило: {my_min} мин., {my_sec} сек.\n')
     report.write(end)
     report.write('\n')
