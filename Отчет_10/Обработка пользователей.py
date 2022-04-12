@@ -5,7 +5,7 @@ my_file = input('Введите название и расширение фай�
 start_time = time.time()
 step = 0
 to_file = my_file.replace('.csv', '_clear.csv')
-print(f"Создан файл {to_file}.")
+print(f"Создан файл: {to_file}.")
 
 # Открытие файла на запись.
 with open(to_file, 'w', encoding='utf-8') as to_file:
@@ -85,7 +85,7 @@ with open(to_file, 'w', encoding='utf-8') as to_file:
             if dep is None or dep == '' or dep == ' ':
                 dep = 'unknown_department'
             if status is None or status == '' or status == ' ':
-                dep = 'unknown_status'
+                status = 'unknown_status'
 
             # to_file.write('id,first_name,last_name,group,department_c,status')
             to_file.write(f'{my_id};{name};{last};{group};{dep};{status}\n')

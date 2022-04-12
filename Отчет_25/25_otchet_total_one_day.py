@@ -217,8 +217,8 @@ df_calls = pd.read_sql_query(total_calls, my_connect)
 print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
 print()
 
-print('ДФ из запроса Status.csv записывается в файл.')
-report.write('ДФ из запроса Status.csv записывается в файл.\n')
+print('ДФ из запроса Status.sql записывается в файл.')
+report.write('ДФ из запроса Status.sql записывается в файл.\n')
 now_time = time.time()
 to_st = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Status.csv'
 df_st.to_csv(to_st, index=False, sep=';', encoding='utf-8')
@@ -226,8 +226,8 @@ print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
 report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
 print()
 
-print('ДФ из запроса My_request.csv записывается в файл.')
-report.write('ДФ из запроса My_request.csv записывается в файл.\n')
+print('ДФ из запроса My_request.sql записывается в файл.')
+report.write('ДФ из запроса My_request.sql записывается в файл.\n')
 now_time = time.time()
 to_req = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\My_request.csv'
 df_req.to_csv(to_req, index=False, sep=';', encoding='utf-8')
@@ -235,8 +235,8 @@ print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
 report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
 print()
 
-print('ДФ из запроса Total_calls.csv записывается в файл.')
-report.write('ДФ из запроса Total_calls.csv записывается в файл.\n')
+print('ДФ из запроса Total_calls.sql записывается в файл.')
+report.write('ДФ из запроса Total_calls.sql записывается в файл.\n')
 now_time = time.time()
 to_calls = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Total_calls.csv'
 df_calls.to_csv(to_calls, index=False, sep=';', encoding='utf-8')

@@ -2,7 +2,7 @@ import telegram_send
 import time
 
 a = sum([i / 2 for i in range(50, 1000)])
-b = sum([i for i in range(50, 10000) if i % 2 == 0])
+b = sum([i for i in range(50, 10000) if i % 3 == 0])
 
 telegram_send.send(messages=[
     f'{a}, {b}\n'
