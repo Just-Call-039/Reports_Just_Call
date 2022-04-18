@@ -112,7 +112,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_rostelecom
             where status != 'Error'
-              and date(date_entered) = date(now()) - interval 1 day
+              and date(date_entered) between '2022-04-01' and '2022-04-03'
             union all
             select 'Beeline'                                                               project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -121,7 +121,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_beeline
             where status != 'Error'
-              and date(date_entered) = date(now()) - interval 1 day
+              and date(date_entered) between '2022-04-01' and '2022-04-03'
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -130,7 +130,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_domru
             where status != 'Error'
-              and date(date_entered) = date(now()) - interval 1 day
+              and date(date_entered) between '2022-04-01' and '2022-04-03'
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -139,7 +139,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_ttk
             where status != 'Error'
-              and date(date_entered) = date(now()) - interval 1 day
+              and date(date_entered) between '2022-04-01' and '2022-04-03'
             union all
             select 'NBN'                                                                   project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -148,7 +148,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_netbynet
             where status != 'Error'
-              and date(date_entered) = date(now()) - interval 1 day
+              and date(date_entered) between '2022-04-01' and '2022-04-03'
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -157,7 +157,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_mts jc_meetings_mts
             where status != 'Error'
-              and date(date_entered) = date(now()) - interval 1 day
+              and date(date_entered) between '2022-04-01' and '2022-04-03'
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -166,14 +166,14 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_beeline_mnp
             where status != 'Error'
-              and date(date_entered) = date(now()) - interval 1 day) as reguest
+              and date(date_entered) between '2022-04-01' and '2022-04-03') as reguest
                left join
            (select date(call_date)          as my_date,
                    uniqueid,
                    substring(dialog, 11, 4) as ochered,
                    phone
             from suitecrm_robot.jc_robot_log
-            where date(call_date) = date(now()) - interval 1 day
+            where date(call_date) between '2022-04-01' and '2022-04-03'
             group by phone) as new_rob on reguest.my_phone_work = new_rob.phone) as total
 where num = 1;
 """
@@ -195,7 +195,7 @@ select date(call_date)          as my_date,
        was_repeat,
        phone
 from suitecrm_robot.jc_robot_log
-where date(call_date) = date(now()) - interval 1 day;
+where date(call_date) between '2022-04-01' and '2022-04-03';
 """
 
 
