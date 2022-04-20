@@ -281,7 +281,7 @@ else:
 
     # Исходный файл с очередями и статусами Status.csv.
     # Открытие исходного файла.
-    with open(to20_st, encoding='utf-8') as file:
+    with open(to_st, encoding='utf-8') as file:
         # Итерация по строкам.
         for now in file:
             # Разделение строки по ";".
