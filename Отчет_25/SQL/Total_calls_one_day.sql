@@ -1,6 +1,6 @@
-select date(call_date)          as my_date,
+select call_date + interval 2 hour as my_date,
        uniqueid,
-       substring(dialog, 11, 4) as ochered,
+       substring(dialog, 11, 4)    as ochered,
        last_step,
        route,
        billsec,
@@ -14,6 +14,4 @@ select date(call_date)          as my_date,
        was_repeat,
        phone
 from suitecrm_robot.jc_robot_log
-where date(call_date) = date(now()) - interval 1 day and deleted = 0;
-# where date(call_date) between '2022-04-01' and '2022-04-03';
-# where date(call_date) >= date(now()) - interval 20 day;
+where date(call_date) = '2022-04-14';

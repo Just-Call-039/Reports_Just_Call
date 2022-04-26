@@ -120,7 +120,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_rostelecom
             where status != 'Error'
-              and date(date_entered) = '2022-04-14'
+              and date(date_entered) = date(now()) - interval 1 day
             union all
             select 'Beeline'                                                               project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -129,7 +129,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_beeline
             where status != 'Error'
-              and date(date_entered) = '2022-04-14'
+              and date(date_entered) = date(now()) - interval 1 day
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -138,7 +138,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_domru
             where status != 'Error'
-              and date(date_entered) = '2022-04-14'
+              and date(date_entered) = date(now()) - interval 1 day
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -147,7 +147,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_ttk
             where status != 'Error'
-              and date(date_entered) = '2022-04-14'
+              and date(date_entered) = date(now()) - interval 1 day
             union all
             select 'NBN'                                                                   project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -156,7 +156,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_netbynet
             where status != 'Error'
-              and date(date_entered) = '2022-04-14'
+              and date(date_entered) = date(now()) - interval 1 day
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -165,7 +165,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_mts jc_meetings_mts
             where status != 'Error'
-              and date(date_entered) = '2022-04-14'
+              and date(date_entered) = date(now()) - interval 1 day
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -174,14 +174,14 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_beeline_mnp
             where status != 'Error'
-              and date(date_entered) = '2022-04-14') as reguest
+              and date(date_entered) = date(now()) - interval 1 day) as reguest
                left join
            (select call_date + interval 2 hour as my_date,
                    uniqueid,
                    substring(dialog, 11, 4)    as ochered,
                    phone
             from suitecrm_robot.jc_robot_log
-            where date(call_date) = '2022-04-14') as new_rob
+            where date(call_date) = date(now()) - interval 1 day) as new_rob
            on reguest.my_phone_work = new_rob.phone) as total
 where num = 1;
 """
@@ -203,7 +203,7 @@ select call_date + interval 2 hour as my_date,
        was_repeat,
        phone
 from suitecrm_robot.jc_robot_log
-where date(call_date) = '2022-04-14';
+where date(call_date) = date(now()) - interval 1 day;
 """
 
 
@@ -391,7 +391,7 @@ else:
     print(
         'Слияние модифицированной БД из запроса "Total_calls.sql" и файла со статусами из "Создание словаря для статусов".')
     # Дальнейшее слияние таблиц. Модифицированная БД и файл со статусами из "Создание словаря для статусов".
-    result = pd.merge(l0eft, right, left_on=['ochered', 'last_step'], right_on=['ochered', 'last_step'], how='left')
+    result = pd.merge(left, right, left_on=['ochered', 'last_step'], right_on=['ochered', 'last_step'], how='left')
     # result = pd.DataFrame(result, columns = my_columns)
     print('Преобразование столбцов.')
     print(f'Создание нового столбца "alive" начато в: {time.strftime("%X")}.')

@@ -43,18 +43,14 @@ print(f'Создан файл {to_file}.')
 
 # Открытие файла на запись.
 with open(to_file, 'w', encoding='utf-8') as to_file:
-    to_file.write('ochered;last_step;status;alive\n')
+    to_file.write('ochered;last_step;status\n')
     # Итерация по ключам (очередям).
     for now in status_dict:
         # Итерация по спискам шагов.
         for step in status_dict[now].keys():
             # Выделение одного последнего шага из списка.
             for last_step in step.split(','):
-                if last_step in dead_steps:
-                    alive = 0
-                else:
-                    alive = 1
                 # Запись в файл. Очередь, последний шаг, статус.
-                to_file.write(f'{now};{last_step};{my_status(now, last_step)};{alive}\n')
+                to_file.write(f'{now};{last_step};{my_status(now, last_step)}\n')
 
 print(f'Время обработки и создания словаря: {round(time.time() - start_time, 3)} сек.')

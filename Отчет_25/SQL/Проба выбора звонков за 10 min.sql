@@ -8,6 +8,6 @@ select call_date                              as my_date,
        phone
 from suitecrm_robot.jc_robot_log
 # where (date(call_date) = date(now()))
-where (date(call_date) = '2022-04-18')
+where (date(call_date) = '2022-04-21')
   and (timediff(time(now()), time(call_date)) between '03:15:00' and '03:24:59')
 order by my_date desc;

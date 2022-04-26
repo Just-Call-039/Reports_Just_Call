@@ -1,6 +1,6 @@
 CREATE TABLE suitecrm_robot_ch.otchet_25
 (
-    my_date Date,
+    my_date DateTime,
     uniqueid String,
     ochered Int32,
     last_step Int32,

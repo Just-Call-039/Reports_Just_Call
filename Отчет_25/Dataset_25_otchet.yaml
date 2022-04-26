@@ -1,0 +1,363 @@
+- columns:
+  - column_name: Date
+    expression: my_date
+    extra: '{}'
+    is_dttm: true
+    python_date_format: '%Y-%m-%d %H:%M'
+    type: DATETIME
+    verbose_name: "\u0414\u0430\u0442\u0430"
+  - column_name: r25.ochered
+    extra: '{}'
+    type: INT32
+    verbose_name: "\u042025_\u043E\u0447\u0435\u0440\u0435\u0434\u044C"
+  - column_name: ochered
+    extra: '{}'
+    type: INT32
+    verbose_name: "\u041E\u0447\u0435\u0440\u0435\u0434\u044C"
+  - column_name: r25.my_date
+    extra: '{}'
+    is_dttm: true
+    type: DATE
+  - column_name: my_date
+    extra: '{}'
+    is_dttm: true
+    type: DATE
+  - column_name: r25.uniqueid
+    extra: '{}'
+    type: STRING
+  - column_name: last_step
+    extra: '{}'
+    type: INT32
+  - column_name: server_number
+    extra: '{}'
+    type: INT32
+  - column_name: city_c
+    extra: '{}'
+    type: INT32
+  - column_name: marker
+    extra: '{}'
+    type: INT32
+  - column_name: billsec
+    extra: '{}'
+    type: INT32
+  - column_name: was_repeat
+    extra: '{}'
+    type: INT8
+  - column_name: alive
+    extra: '{}'
+    type: INT8
+  - column_name: assigned_user_id
+    extra: '{}'
+    type: STRING
+  - column_name: client_status
+    extra: '{}'
+    type: STRING
+  - column_name: status_request
+    extra: '{}'
+    type: STRING
+  - column_name: phone_number
+    extra: '{}'
+    type: STRING
+  - column_name: ptv_c
+    extra: '{}'
+    type: STRING
+  - column_name: teh_vozmozhnost
+    extra: '{}'
+    type: STRING
+  - column_name: otkaz
+    extra: '{}'
+    type: STRING
+  - column_name: status
+    extra: '{}'
+    type: STRING
+  - column_name: directory
+    extra: '{}'
+    type: STRING
+  - column_name: project
+    extra: '{}'
+    type: STRING
+  - column_name: uniqueid
+    extra: '{}'
+    type: STRING
+  - column_name: region
+    extra: '{}'
+    type: STRING
+  - column_name: phone
+    extra: '{}'
+    type: STRING
+  - column_name: route
+    extra: '{}'
+    type: STRING
+  metrics:
+  - d3format: .2%
+    expression: countIf(distinct phone, client_status = 'Wait' and (last_step not
+      between '230' and '236') and alive = 1) / (sumIf(alive, status like 'perevod'
+      and client_status != 'Wait') + countIf(distinct phone, client_status = 'Wait'
+      and (last_step not between '230' and '236') and alive = 1))
+    extra: '{}'
+    metric_name: "\u0416\u0434\u0443\u043D\u044B, %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, r25.uniqueid != '') / sumIf(alive, status like 'perevod'
+      and client_status in ('CallWait', 'refusing', 'MeetingWait'))
+    extra: '{}'
+    metric_name: "\u0417\u0430\u044F\u0432\u043A\u0430 \u043E\u0442 \"\u043F\u0435\
+      \u0440\u0435\u0432\u0435\u043B\u0438\u0441\u044C\", %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: (sumIf(alive, status like '') - (sumIf(alive, last_step = '209') +
+      sumIf(alive, last_step = '409'))) / sum(alive)
+    extra: '{}'
+    metric_name: "\u041F\u0440\u043E\u0447\u0438\u0439 \u0441\u0442\u0430\u0442\u0443\
+      \u0441, %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, status like 'perevod' and client_status in ('CallWait',
+      'refusing', 'MeetingWait')) / sumIf(alive, status like 'perevod')
+    extra: '{}'
+    metric_name: "\u041F\u0435\u0440\u0435\u0432\u0435\u043B\u0438\u0441\u044C, %"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: countIf(distinct phone, client_status = 'Wait' and (last_step not
+      between '230' and '236') and alive = 1)
+    extra: '{}'
+    metric_name: "\u0416\u0434\u0443\u043D\u044B"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, status like '') - (sumIf(alive, last_step = '209') +
+      sumIf(alive, last_step = '409'))
+    extra: '{}'
+    metric_name: "\u041F\u0440\u043E\u0447\u0438\u0439 \u0441\u0442\u0430\u0442\u0443\
+      \u0441"
+    verbose_name: ''
+  - d3format: .2%
+    expression: countIf(uniqueid, last_step in ('261', '262', '1')) / count(uniqueid)
+    extra: '{}'
+    metric_name: "\u041E\u0431\u0440\u044B\u0432 \u043D\u0430 \u043F\u0435\u0440\u0432\
+      \u043E\u043C \u0448\u0430\u0433\u0435, %"
+    verbose_name: ''
+  - d3format: .3%
+    expression: sumIf(alive, r25.uniqueid != '') / sum(alive)
+    extra: '{}'
+    metric_name: "\u0417\u0430\u044F\u0432\u043A\u0430 \u043E\u0442 \"\u0432\u0441\
+      \u0435\u0433\u043E \u0436\u0438\u0432\u044B\u0445\", %"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, status like 'perevod' and client_status in ('CallWait',
+      'refusing', 'MeetingWait'))
+    extra: '{}'
+    metric_name: "\u041F\u0435\u0440\u0435\u0432\u0435\u043B\u0438\u0441\u044C"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, status like 'sbros_na_presentacii') / sum(alive)
+    extra: '{}'
+    metric_name: "\u0421\u0431\u0440\u043E\u0441 \u043D\u0430 \u043F\u0440\u0435\u0437\
+      ., %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, status like 'sbros_na_privetsvii') / sum(alive)
+    extra: '{}'
+    metric_name: "\u0421\u0431\u0440\u043E\u0441 \u043D\u0430 \u043F\u0440\u0438\u0432\
+      ., %"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: countIf(uniqueid, last_step in ('261', '262', '1'))
+    extra: '{}'
+    metric_name: "\u041E\u0431\u0440\u044B\u0432 \u043D\u0430 \u043F\u0435\u0440\u0432\
+      \u043E\u043C \u0448\u0430\u0433\u0435"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, last_step = '209') / sum(alive)
+    extra: '{}'
+    metric_name: "\u0410\u0431\u043E\u043D\u0435\u043D\u0442 \u043C\u043E\u043B\u0447\
+      \u0438\u0442, %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, last_step = '409') / sum(alive)
+    extra: '{}'
+    metric_name: "\u041E\u0448\u0438\u0431\u043A\u0430 Action, %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, status like 'yavlyaetsya_abonentom') / sum(alive)
+    extra: '{}'
+    metric_name: "\u042F\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u0430\u0431\u043E\
+      \u043D\u0435\u043D\u0442\u043E\u043C, %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, status like 'neudobno_govorit') / sum(alive)
+    extra: '{}'
+    metric_name: "\u041D\u0435\u0443\u0434\u043E\u0431\u043D\u043E \u0433\u043E\u0432\
+      \u043E\u0440\u0438\u0442\u044C, %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, status like 'perevod') / sum(alive)
+    extra: '{}'
+    metric_name: "\u0412\u0441\u0435\u0433\u043E \u043F\u0435\u0440\u0435\u0432\u0435\
+      \u0434\u0435\u043D\u043E, %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(billsec, alive=0) / SUM(billsec)
+    extra: '{}'
+    metric_name: "\u041F\u0440\u043E\u0446\u0435\u043D\u0442 \u0441\u0435\u043A\u0443\
+      \u043D\u0434 \u043D\u0430 \u043C\u0435\u0440\u0442\u0432\u044B\u0439 \u0437\u0432\
+      \u043E\u043D\u043E\u043A"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(billsec, alive=1) / SUM(billsec)
+    extra: '{}'
+    metric_name: "\u041F\u0440\u043E\u0446\u0435\u043D\u0442 \u0441\u0435\u043A\u0443\
+      \u043D\u0434 \u043D\u0430 \u0436\u0438\u0432\u043E\u0439 \u0437\u0432\u043E\u043D\
+      \u043E\u043A"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(billsec, alive = 0)
+    extra: '{}'
+    metric_name: "\u0421\u0443\u043C\u043C\u0430 \u0441\u0435\u043A\u0443\u043D\u0434\
+      \ \u043D\u0430 \u043C\u0435\u0440\u0442\u0432\u044B\u0439 \u0437\u0432\u043E\
+      \u043D\u043E\u043A"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(billsec, alive = 1)
+    extra: '{}'
+    metric_name: "\u0421\u0443\u043C\u043C\u0430 \u0441\u0435\u043A\u0443\u043D\u0434\
+      \ \u043D\u0430 \u0436\u0438\u0432\u043E\u0439 \u0437\u0432\u043E\u043D\u043E\
+      \u043A"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, teh_vozmozhnost like '0') / sum(alive)
+    extra: '{}'
+    metric_name: "\u041D\u0422\u0412, %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, teh_vozmozhnost like '1') / sum(alive)
+    extra: '{}'
+    metric_name: "\u0415\u0422\u0412, %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, status like 'oshobka_razgovora') / sum(alive)
+    extra: '{}'
+    metric_name: "\u041E\u0448\u0438\u0431\u043A\u0430, %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sumIf(alive, status like 'otkaz') / sum(alive)
+    extra: '{}'
+    metric_name: "\u041E\u0442\u043A\u0430\u0437, %"
+    verbose_name: ''
+  - d3format: .2%
+    expression: countIf(uniqueid, status like 'avtootvetchik') / count(uniqueid)
+    extra: '{}'
+    metric_name: "\u0410\u0432\u0442\u043E\u043E\u0442\u0432\u0435\u0442\u0447\u0438\
+      \u043A, %"
+    verbose_name: ''
+  - d3format: .0f
+    expression: sum(alive) / sumIf(alive, r25.uniqueid != '')
+    extra: '{}'
+    metric_name: "\u041A\u0417"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, status like 'sbros_na_presentacii')
+    extra: '{}'
+    metric_name: "\u0421\u0431\u0440\u043E\u0441 \u043D\u0430 \u043F\u0440\u0435\u0437\
+      ."
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, status like 'sbros_na_privetsvii')
+    extra: '{}'
+    metric_name: "\u0421\u0431\u0440\u043E\u0441 \u043D\u0430 \u043F\u0440\u0438\u0432\
+      ."
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, last_step = '209')
+    extra: '{}'
+    metric_name: "\u0410\u0431\u043E\u043D\u0435\u043D\u0442 \u043C\u043E\u043B\u0447\
+      \u0438\u0442"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, last_step = '409')
+    extra: '{}'
+    metric_name: "\u041E\u0448\u0438\u0431\u043A\u0430 Action"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, status like 'yavlyaetsya_abonentom')
+    extra: '{}'
+    metric_name: "\u042F\u0432\u043B\u044F\u0435\u0442\u0441\u044F \u0430\u0431\u043E\
+      \u043D\u0435\u043D\u0442\u043E\u043C"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, status like 'neudobno_govorit')
+    extra: '{}'
+    metric_name: "\u041D\u0435\u0443\u0434\u043E\u0431\u043D\u043E \u0433\u043E\u0432\
+      \u043E\u0440\u0438\u0442\u044C"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, status like 'perevod')
+    extra: '{}'
+    metric_name: "\u0412\u0441\u0435\u0433\u043E \u043F\u0435\u0440\u0435\u0432\u0435\
+      \u0434\u0435\u043D\u043E"
+    verbose_name: ''
+  - d3format: .2%
+    expression: sum(was_repeat) / sum(alive)
+    extra: '{}'
+    metric_name: "\u0411\u044B\u043B\u0430 \u041F\u0422\u0412, %"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, r25.uniqueid != '')
+    extra: '{}'
+    metric_name: "\u0417\u0430\u044F\u0432\u043A\u0430"
+    verbose_name: ''
+  - d3format: '.20'
+    expression: countIf(uniqueid, status like 'avtootvetchik')
+    extra: '{}'
+    metric_name: "\u0410\u0432\u0442\u043E\u043E\u0442\u0432\u0435\u0442\u0447\u0438\
+      \u043A"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, teh_vozmozhnost like '0')
+    extra: '{}'
+    metric_name: "\u041D\u0422\u0412"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, teh_vozmozhnost like '1')
+    extra: '{}'
+    metric_name: "\u0415\u0422\u0412"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, status like 'oshobka_razgovora')
+    extra: '{}'
+    metric_name: "\u041E\u0448\u0438\u0431\u043A\u0430"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sumIf(alive, status like 'otkaz')
+    extra: '{}'
+    metric_name: "\u041E\u0442\u043A\u0430\u0437"
+    verbose_name: ''
+  - d3format: '.20'
+    expression: sum(alive)
+    extra: '{}'
+    metric_name: "\u0412\u0441\u0435\u0433\u043E \u0436\u0438\u0432\u044B\u0445"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: SUM(billsec)
+    extra: '{}'
+    metric_name: "\u0421\u0443\u043C\u043C\u0430 \u0441\u0435\u043A\u0443\u043D\u0434"
+    verbose_name: ''
+  - d3format: '.7'
+    expression: sum(was_repeat)
+    extra: '{}'
+    metric_name: "\u0411\u044B\u043B\u0430 \u041F\u0422\u0412"
+    verbose_name: ''
+  - d3format: '.20'
+    expression: count(uniqueid)
+    extra: '{}'
+    metric_name: "\u0412\u0441\u0435\u0433\u043E"
+    verbose_name: ''
+  - expression: count(*)
+    extra: '{}'
+    metric_name: count
+  schema: suitecrm_robot_ch
+  sql: 'SELECT *
+
+    FROM suitecrm_robot_ch.otchet_25 o25
+
+    left JOIN suitecrm_robot_ch.request_25 r25 on r25.uniqueid = o25.uniqueid'
+  table_name: Dataset_25_otchet

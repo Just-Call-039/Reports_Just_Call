@@ -23,34 +23,42 @@ def my_status(ochered, key):
 
 
 # Функция для проверки технической возможности.
-# Необходимо передать очередь, was_rep, шаги.
-def teh_v(o, was_rep, route):
-    # Если was_rep = 0, то статус "Не проверялось".
-    if was_rep == 0:
-        return "Didn't check"
-    # Если was_rep = 1, то идем дальше.
-    else:
-        route = route.split(',')
-        o = str(o)
-        # Если очередь присутствует в одном из словарей, начинаем проверку.
-        if o in tuple(est_tehv.keys()) or o in tuple(net_tehv.keys()):
-            for i in route:
-                # Проверка, находится ли шаг в словаре "Есть техническая возможность".
-                # Если находится, то возвращает значение 1.
-                if i in est_tehv[o]:
-                    value = 1
-                    return value
-                # Проверка, находится ли шаг в словаре "Нет технической возможности".
-                # Если находится, то возвращает значение 0.
-                elif i in net_tehv[o]:
-                    value = 0
-                    return value
-            # Если ничего не найдено в словарях, возвращает "Неизвестно".
-            else:
-                return "Don't know"
-        # Если очередь отсутствует в словарях, возвращает "Неизвестно".
+# Необходимо передать очередь, шаги.
+def teh_v(ochered, route):
+    net_tv_step = ['105', '106', '107']
+    route = tuple(i.strip() for i in str(route).split(','))
+    ochered = str(ochered)
+    # Если последний шаг в списке шагов с НТВ, то возвращаем 0.
+    if route[-1] in net_tv_step:
+        t_v = 0
+        return t_v
+    # Если последний шаг не в списке шагов с НТВ, то начинаем перебор шагов.
+    elif route[-1] not in net_tv_step:
+        for st in route:
+            # Если очередь в словаре ЕТВ и найден соответствующий шаг для такой очереди, то возвращаем 1.
+            if ochered in tuple(est_tehv.keys()) and st in est_tehv[ochered]:
+                t_v = 1
+                return t_v
+            # Если очередь в словаре НТВ и найден соответствующий шаг для такой очереди, то возвращаем 0.
+            elif ochered in tuple(net_tehv.keys()) and st in net_tehv[ochered]:
+                t_v = 0
+                return t_v
+        # Если никакие условия не выполнены, то возвращаем "Didn't check".
         else:
-            return "Don't know"
+            t_v = "Didn't check"
+            return t_v
+
+
+# Функция для определения типа звонка.
+def alive(route):
+    # Мертвые шаги.
+    dead_steps = ['0', '1', '111', '261', '262']
+    # Если последний шаг в списке мертвых, то для звонка записываем 0.
+    if str(route).split(',')[-1] in dead_steps:
+        return 0
+    # Иначе для звонка записываем 1.
+    else:
+        return 1
 
 
 start_time = time.time()
@@ -72,7 +80,7 @@ report.write(f'Подключение выполнено. Ушло времен�
 print()
 
 status = """
-SELECT substring(turn, 11, 4) as ochered,
+select substring(turn, 11, 4) as ochered,
        steps_autoanswer       as avtootvetchik,
        steps_transferred      as perevod,
        steps_refusing         as otkaz,
@@ -83,9 +91,8 @@ SELECT substring(turn, 11, 4) as ochered,
        is_subs                as yavlyaetsya_abonentom,
        steps_inconvenient     as neudobno_govorit,
        steps_error            as oshobka_razgovora
-FROM suitecrm.jc_robot_reportconfig
-         INNER JOIN suitecrm.jc_robot_reportconfig_cstm ON id = id_C
-WHERE deleted = 0;
+from jc_robot_reportconfig
+where deleted = 0;
 """
 
 my_request = """
@@ -112,7 +119,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_rostelecom
             where status != 'Error'
-              and date(date_entered) between '2022-03-28' and '2022-04-03'
+              and date(date_entered) between '2022-04-21' and '2022-04-24'
             union all
             select 'Beeline'                                                               project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -121,7 +128,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_beeline
             where status != 'Error'
-              and date(date_entered) between '2022-03-28' and '2022-04-03'
+              and date(date_entered) between '2022-04-21' and '2022-04-24'
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -130,7 +137,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_domru
             where status != 'Error'
-              and date(date_entered) between '2022-03-28' and '2022-04-03'
+              and date(date_entered) between '2022-04-21' and '2022-04-24'
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -139,7 +146,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_ttk
             where status != 'Error'
-              and date(date_entered) between '2022-03-28' and '2022-04-03'
+              and date(date_entered) between '2022-04-21' and '2022-04-24'
             union all
             select 'NBN'                                                                   project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -148,7 +155,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_netbynet
             where status != 'Error'
-              and date(date_entered) between '2022-03-28' and '2022-04-03'
+              and date(date_entered) between '2022-04-21' and '2022-04-24'
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -157,7 +164,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_mts jc_meetings_mts
             where status != 'Error'
-              and date(date_entered) between '2022-03-28' and '2022-04-03'
+              and date(date_entered) between '2022-04-21' and '2022-04-24'
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -166,22 +173,22 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_beeline_mnp
             where status != 'Error'
-              and date(date_entered) between '2022-03-28' and '2022-04-03') as reguest
+              and date(date_entered) between '2022-04-21' and '2022-04-24') as reguest
                left join
-           (select date(call_date)          as my_date,
+           (select call_date + interval 2 hour as my_date,
                    uniqueid,
-                   substring(dialog, 11, 4) as ochered,
+                   substring(dialog, 11, 4)    as ochered,
                    phone
             from suitecrm_robot.jc_robot_log
-            where date(call_date) between '2022-03-28' and '2022-04-03'
-            group by phone) as new_rob on reguest.my_phone_work = new_rob.phone) as total
+            where date(call_date) between '2022-04-21' and '2022-04-24') as new_rob
+           on reguest.my_phone_work = new_rob.phone) as total
 where num = 1;
 """
 
 total_calls = """
-select date(call_date)          as my_date,
+select call_date + interval 2 hour as my_date,
        uniqueid,
-       substring(dialog, 11, 4) as ochered,
+       substring(dialog, 11, 4)    as ochered,
        last_step,
        route,
        billsec,
@@ -195,7 +202,7 @@ select date(call_date)          as my_date,
        was_repeat,
        phone
 from suitecrm_robot.jc_robot_log
-where date(call_date) between '2022-03-28' and '2022-04-03';
+where date(call_date) between '2022-04-21' and '2022-04-24';
 """
 
 
@@ -274,10 +281,8 @@ else:
     status_time = time.time()
     to_file = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Status_dict.csv'
     print(f'Создан файл со статусами {to_file}.')
-    print('Производится запись статусов в файл, определение живой / мертвый звонок.')
+    print('Производится запись статусов в файл.')
     status_dict = {}
-    # Мертвые шаги.
-    dead_steps = ['0', '1', '111', '261', '262']
 
     # Исходный файл с очередями и статусами Status.csv.
     # Открытие исходного файла.
@@ -296,19 +301,15 @@ else:
 
     # Открытие файла на запись.
     with open(to_file, 'w', encoding='utf-8') as to_file:
-        to_file.write('ochered;last_step;status;alive\n')
+        to_file.write('ochered;last_step;status\n')
         # Итерация по ключам (очередям).
         for now in status_dict:
             # Итерация по спискам шагов.
             for step in status_dict[now].keys():
                 # Выделение одного последнего шага из списка.
                 for last_step in step.split(','):
-                    if last_step in dead_steps:
-                        alive = 0
-                    else:
-                        alive = 1
                     # Запись в файл. Очередь, последний шаг, статус.
-                    to_file.write(f'{now};{last_step};{my_status(now, last_step)};{alive}\n')
+                    to_file.write(f'{now};{last_step};{my_status(now, last_step)}\n')
 
     print(f'Время обработки, создания и записи файла составило: {round(time.time() - status_time, 3)} сек.')
     print()
@@ -327,7 +328,7 @@ else:
     with open(r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Status_dict.csv') as status:
         for now in status:
             now = now.split(';')
-            o, step, stat = now[0], now[1], now[2]
+            o, step, stat = now[0].strip(), now[1].strip(), now[2].strip()
             if stat == 'net_teh_vozmozhnosti':
                 if o in net_tehv:
                     net_tehv[o].add(step)
@@ -376,7 +377,7 @@ else:
     print()
     # Создание нового столбца "Техническая возможность".
     # Значение определяется с помощью функции для проверки технической возможности.
-    left['teh_vozmozhnost'] = left.progress_apply(lambda x: teh_v(x['ochered'], x['was_repeat'], x['route']), axis=1)
+    left['teh_vozmozhnost'] = left.progress_apply(lambda x: teh_v(x['ochered'], x['route']), axis=1)
     print()
 
     print(f'Слияние таблиц и преобразование столбцов начато в: {time.strftime("%X")}.')
@@ -392,8 +393,12 @@ else:
     result = pd.merge(left, right, left_on=['ochered', 'last_step'], right_on=['ochered', 'last_step'], how='left')
     # result = pd.DataFrame(result, columns = my_columns)
     print('Преобразование столбцов.')
-    # Заменяем все пустые значения из столбца "alive" на 1.
-    result['alive'] = result['alive'].fillna(1)
+    print(f'Создание нового столбца "alive" начато в: {time.strftime("%X")}.')
+    print()
+    # Создание нового столбца "alive".
+    # Значение определяется с помощью функции для определения типа звонка.
+    result['alive'] = result.progress_apply(lambda x: alive(x['route']), axis=1)
+    print()
     # Преобразуем значения из столбца "alive" в "int64:.
     result = result.astype({'alive': 'int64'})
     # Переименовал столбец "Область" в "region".
