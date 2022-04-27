@@ -72,7 +72,7 @@ telegram_send.send(messages=[f'Начало работы отчета №25 в: 
 report.write(
     f'Производится подключение к БД. Дата: {time.strftime("%d-%m-%Y")}. Время: {time.strftime("%X")}.\n')
 now_time = time.time()
-my_connect = pymysql.Connect(host="84.201.164.249", user="glotov", passwd="dZ23HJiNTlf8Jpk4YeafSOHVR2qB65gO",
+my_connect = pymysql.Connect(host="192.168.1.42", user="glotov", passwd="dZ23HJiNTlf8Jpk4YeafSOHVR2qB65gO",
                              db="suitecrm",
                              charset='utf8')
 print(f'Подключение выполнено. Ушло времени: {round(time.time() - now_time, 3)} сек.')
@@ -80,19 +80,18 @@ report.write(f'Подключение выполнено. Ушло времен�
 print()
 
 status = """
-select substring(turn, 11, 4)                  as ochered,
-       steps_autoanswer                        as avtootvetchik,
-       steps_transferred                       as perevod,
-       steps_refusing                          as otkaz,
-       if(reset_greet is null, 2, reset_greet) as sbros_na_privetsvii,
-       x_ptv                                   as net_teh_vozmozhnosti,
-       have_ptv                                as est_teh_vozmozhnost,
-       reset_pres                              as sbros_na_presentacii,
-       is_subs                                 as yavlyaetsya_abonentom,
-       steps_inconvenient                      as neudobno_govorit,
-       steps_error                             as oshobka_razgovora
+select substring(turn, 11, 4) as ochered,
+       steps_autoanswer       as avtootvetchik,
+       steps_transferred      as perevod,
+       steps_refusing         as otkaz,
+       reset_greet            as sbros_na_privetsvii,
+       x_ptv                  as net_teh_vozmozhnosti,
+       have_ptv               as est_teh_vozmozhnost,
+       reset_pres             as sbros_na_presentacii,
+       is_subs                as yavlyaetsya_abonentom,
+       steps_inconvenient     as neudobno_govorit,
+       steps_error            as oshobka_razgovora
 from jc_robot_reportconfig
-         inner join jc_robot_reportconfig_cstm ON id = id_C
 where deleted = 0;
 """
 
