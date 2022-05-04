@@ -72,7 +72,7 @@ telegram_send.send(messages=[f'Начало работы отчета №25 в: 
 report.write(
     f'Производится подключение к БД. Дата: {time.strftime("%d-%m-%Y")}. Время: {time.strftime("%X")}.\n')
 now_time = time.time()
-my_connect = pymysql.Connect(host="192.168.1.42", user="glotov", passwd="dZ23HJiNTlf8Jpk4YeafSOHVR2qB65gO",
+my_connect = pymysql.Connect(host="84.201.164.249", user="glotov", passwd="dZ23HJiNTlf8Jpk4YeafSOHVR2qB65gO",
                              db="suitecrm",
                              charset='utf8')
 print(f'Подключение выполнено. Ушло времени: {round(time.time() - now_time, 3)} сек.')
@@ -119,7 +119,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_rostelecom
             where status != 'Error'
-              and date(date_entered) between '2022-04-01' and '2022-04-08'
+              and date(date_entered) = date(now()) - interval 1 day
             union all
             select 'Beeline'                                                               project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -128,7 +128,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_beeline
             where status != 'Error'
-              and date(date_entered) between '2022-04-01' and '2022-04-08'
+              and date(date_entered) = date(now()) - interval 1 day
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -137,7 +137,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_domru
             where status != 'Error'
-              and date(date_entered) between '2022-04-01' and '2022-04-08'
+              and date(date_entered) = date(now()) - interval 1 day
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -146,7 +146,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_ttk
             where status != 'Error'
-              and date(date_entered) between '2022-04-01' and '2022-04-08'
+              and date(date_entered) = date(now()) - interval 1 day
             union all
             select 'NBN'                                                                   project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -155,7 +155,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_netbynet
             where status != 'Error'
-              and date(date_entered) between '2022-04-01' and '2022-04-08'
+              and date(date_entered) = date(now()) - interval 1 day
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -164,7 +164,7 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_mts jc_meetings_mts
             where status != 'Error'
-              and date(date_entered) between '2022-04-01' and '2022-04-08'
+              and date(date_entered) = date(now()) - interval 1 day
             union all
             select project,
                    concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
@@ -173,14 +173,14 @@ from (select my_phone_work                                                as pho
                    status
             from suitecrm.jc_meetings_beeline_mnp
             where status != 'Error'
-              and date(date_entered) between '2022-04-01' and '2022-04-08') as reguest
+              and date(date_entered) = date(now()) - interval 1 day) as reguest
                left join
            (select call_date + interval 2 hour as my_date,
                    uniqueid,
                    substring(dialog, 11, 4)    as ochered,
                    phone
             from suitecrm_robot.jc_robot_log
-            where date(call_date) between '2022-04-01' and '2022-04-08') as new_rob
+            where date(call_date) = date(now()) - interval 1 day) as new_rob
            on reguest.my_phone_work = new_rob.phone) as total
 where num = 1;
 """
@@ -202,7 +202,7 @@ select call_date + interval 2 hour as my_date,
        was_repeat,
        phone
 from suitecrm_robot.jc_robot_log
-where date(call_date) between '2022-04-01' and '2022-04-08';
+where date(call_date) = date(now()) - interval 1 day;
 """
 
 
@@ -452,8 +452,8 @@ else:
     print('Файл прочитан.')
     print('Производится запись файла в БД.')
     client.insert_dataframe('INSERT INTO suitecrm_robot_ch.request_25 VALUES',
-                            df[['phone_number', 'assigned_user_id', 'status_request', 'my_date', 'uniqueid', 'ochered',
-                                'project']])
+                            df[['phone_number', 'assigned_user_id', 'status_request', 'date_reguest', 'uniqueid',
+                                'ochered', 'project']])
     print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
     report.write(f'Файл занесен в БД. Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
     print()
