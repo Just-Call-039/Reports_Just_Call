@@ -14,5 +14,5 @@ print('Ок.')
 # print(df.head())
 
 client.insert_dataframe('INSERT INTO suitecrm_robot_ch.request_25 VALUES',
-                        df[['phone_number', 'assigned_user_id', 'status_request', 'my_date', 'uniqueid', 'ochered',
+                        df[['phone_number', 'assigned_user_id', 'status_request', 'date_reguest', 'uniqueid', 'ochered',
                             'project']])
