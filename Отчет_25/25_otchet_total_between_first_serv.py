@@ -72,7 +72,7 @@ telegram_send.send(messages=[f'Начало работы отчета №25 в: 
 report.write(
     f'Производится подключение к БД. Дата: {time.strftime("%d-%m-%Y")}. Время: {time.strftime("%X")}.\n')
 now_time = time.time()
-my_connect = pymysql.Connect(host="192.168.1.42", user="glotov", passwd="dZ23HJiNTlf8Jpk4YeafSOHVR2qB65gO",
+my_connect = pymysql.Connect(host="84.201.164.249", user="glotov", passwd="dZ23HJiNTlf8Jpk4YeafSOHVR2qB65gO",
                              db="suitecrm",
                              charset='utf8')
 print(f'Подключение выполнено. Ушло времени: {round(time.time() - now_time, 3)} сек.')
@@ -95,6 +95,96 @@ from jc_robot_reportconfig
 where deleted = 0;
 """
 
+my_request = """
+select phone_number,
+       assigned_user_id,
+       status as status_request,
+       date_reguest,
+       uniqueid,
+       ochered,
+       project
+from (select my_phone_work                                                as phone_number,
+             assigned_user_id,
+             status,
+             reguest.date                                                 as date_reguest,
+             new_rob.uniqueid,
+             new_rob.ochered,
+             new_rob.phone,
+             row_number() over (partition by phone order by my_date desc) as num,
+             project
+      from (select 'RTK'                                                                   project,
+                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                   date_entered + interval 2 hour                                       as date,
+                   assigned_user_id,
+                   status
+            from suitecrm.jc_meetings_rostelecom
+            where status != 'Error'
+              and date(date_entered) between '2022-05-20' and '2022-05-22'
+            union all
+            select 'Beeline'                                                               project,
+                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                   date_entered + interval 2 hour                                       as date,
+                   assigned_user_id,
+                   status
+            from suitecrm.jc_meetings_beeline
+            where status != 'Error'
+              and date(date_entered) between '2022-05-20' and '2022-05-22'
+            union all
+            select project,
+                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                   date_entered + interval 2 hour                                       as date,
+                   assigned_user_id,
+                   status
+            from suitecrm.jc_meetings_domru
+            where status != 'Error'
+              and date(date_entered) between '2022-05-20' and '2022-05-22'
+            union all
+            select project,
+                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                   date_entered + interval 2 hour                                       as date,
+                   assigned_user_id,
+                   status
+            from suitecrm.jc_meetings_ttk
+            where status != 'Error'
+              and date(date_entered) between '2022-05-20' and '2022-05-22'
+            union all
+            select 'NBN'                                                                   project,
+                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                   date_entered + interval 2 hour                                       as date,
+                   assigned_user_id,
+                   status
+            from suitecrm.jc_meetings_netbynet
+            where status != 'Error'
+              and date(date_entered) between '2022-05-20' and '2022-05-22'
+            union all
+            select project,
+                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                   date_entered + interval 2 hour                                       as date,
+                   assigned_user_id,
+                   status
+            from suitecrm.jc_meetings_mts jc_meetings_mts
+            where status != 'Error'
+              and date(date_entered) between '2022-05-20' and '2022-05-22'
+            union all
+            select project,
+                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                   date_entered + interval 2 hour                                       as date,
+                   assigned_user_id,
+                   status
+            from suitecrm.jc_meetings_beeline_mnp
+            where status != 'Error'
+              and date(date_entered) between '2022-05-20' and '2022-05-22') as reguest
+               left join
+           (select call_date + interval 2 hour as my_date,
+                   uniqueid,
+                   substring(dialog, 11, 4)    as ochered,
+                   phone
+            from suitecrm_robot.jc_robot_log
+            where date(call_date) >= date(now()) - interval 90 day) as new_rob
+           on reguest.my_phone_work = new_rob.phone) as total
+where num = 1;
+"""
+
 total_calls = """
 select call_date + interval 2 hour as my_date,
        uniqueid,
@@ -112,7 +202,7 @@ select call_date + interval 2 hour as my_date,
        was_repeat,
        phone
 from suitecrm_robot.jc_robot_log
-where date(call_date) between '2022-04-21' and '2022-04-27';
+where date(call_date) between '2022-05-20' and '2022-05-22';
 """
 
 
@@ -124,6 +214,14 @@ try:
     report.write('Запрос из Status.sql заносится в ДФ.\n')
     now_time = time.time()
     df_st = pd.read_sql_query(status, my_connect)
+    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
+    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print()
+
+    print('Запрос из My_request.sql заносится в ДФ.')
+    report.write('Запрос из My_request.sql заносится в ДФ.\n')
+    now_time = time.time()
+    df_req = pd.read_sql_query(my_request, my_connect)
     print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
     report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
     print()
@@ -157,6 +255,15 @@ else:
     now_time = time.time()
     to_st = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Status.csv'
     df_st.to_csv(to_st, index=False, sep=';', encoding='utf-8')
+    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
+    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print()
+
+    print('ДФ из запроса My_request.sql записывается в файл.')
+    report.write('ДФ из запроса My_request.sql записывается в файл.\n')
+    now_time = time.time()
+    to_req = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\My_request.csv'
+    df_req.to_csv(to_req, index=False, sep=';', encoding='utf-8')
     print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
     report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
     print()
@@ -280,8 +387,8 @@ else:
     # Слияние двух таблиц. БД из запроса "Total_calls.sql" и файла с регионами.
     left = pd.merge(left, city[['city_c', 'Область']], left_on='city_c', right_on='city_c', how='left')
 
-    print(
-        'Слияние модифицированной БД из запроса "Total_calls.sql" и файла со статусами из "Создание словаря для статусов".')
+    print('Слияние модифицированной БД из запроса "Total_calls.sql" и файла со статусами '
+          'из "Создание словаря для статусов".')
     # Дальнейшее слияние таблиц. Модифицированная БД и файл со статусами из "Создание словаря для статусов".
     result = pd.merge(left, right, left_on=['ochered', 'last_step'], right_on=['ochered', 'last_step'], how='left')
     # result = pd.DataFrame(result, columns = my_columns)
@@ -337,6 +444,19 @@ else:
     report.write(f'Файл занесен в БД. Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
     print()
 
+
+    print(f'Чтение файла My_request.csv начато в: {time.strftime("%X")}.')
+    report.write(f'Чтение файла My_request.csv начато в: {time.strftime("%X")}.\n')
+    now_time = time.time()
+    df = pd.read_csv(to_req, sep=';', dtype='unicode')
+    print('Файл прочитан.')
+    print('Производится запись файла в БД.')
+    client.insert_dataframe('INSERT INTO suitecrm_robot_ch.request_25 VALUES',
+                            df[['phone_number', 'assigned_user_id', 'status_request', 'date_reguest', 'uniqueid',
+                                'ochered', 'project']])
+    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
+    report.write(f'Файл занесен в БД. Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print()
 
     end_time = time.time()
     total_time = end_time - start_time

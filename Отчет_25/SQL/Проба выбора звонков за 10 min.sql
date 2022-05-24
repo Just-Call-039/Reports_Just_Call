@@ -1,4 +1,4 @@
-select call_date                              as my_date,
+select call_date + interval 2 hour            as my_date,
        now(),
        timediff(time(now()), time(call_date)) as r,
        uniqueid,

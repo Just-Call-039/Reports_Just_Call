@@ -1,6 +1,6 @@
-select call_date + interval '2' hour as my_date,
+select call_date + interval 2 hour as my_date,
        uniqueid,
-       substring(dialog, 11, 4)      as ochered,
+       substring(dialog, 11, 4)    as ochered,
        last_step,
        route,
        billsec,

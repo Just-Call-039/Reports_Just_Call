@@ -175,7 +175,7 @@ from (select my_phone_work as phone_number,
               and date(date_entered) = date(now()) - interval 1 day) as reguest
                left join
            (select call_date + interval 2 hour as my_date,
-                   uniqueid                    as uniqueid,
+                   uniqueid,
                    substring(dialog, 11, 4)    as ochered,
                    phone
             from suitecrm_robot.jc_robot_log as jrl
@@ -421,8 +421,8 @@ else:
     # Слияние двух таблиц. БД из запроса "Total_calls.sql" и файла с регионами.
     left = pd.merge(left, city[['city_c', 'Область']], left_on='city_c', right_on='city_c', how='left')
 
-    print(
-        'Слияние модифицированной БД из запроса "Total_calls.sql" и файла со статусами из "Создание словаря для статусов".')
+    print('Слияние модифицированной БД из запроса "Total_calls.sql" и файла со статусами '
+          'из "Создание словаря для статусов".')
     # Дальнейшее слияние таблиц. Модифицированная БД и файл со статусами из "Создание словаря для статусов".
     result = pd.merge(left, right, left_on=['ochered', 'last_step'], right_on=['ochered', 'last_step'], how='left')
     # result = pd.DataFrame(result, columns = my_columns)
