@@ -1,14 +1,6 @@
 import pandas as pd
-import time
-import pymysql
 from sqlalchemy import create_engine
-import telegram_send
 from tqdm import tqdm
-from clickhouse_driver import Client
-
-
-tqdm.pandas()
-
 
 my_connect = create_engine("mysql+pymysql://glotov:dZ23HJiNTlf8Jpk4YeafSOHVR2qB65gO@84.201.164.249")
 my_connect.connect()
