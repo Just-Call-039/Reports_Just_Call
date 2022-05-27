@@ -2,24 +2,16 @@ import pandas as pd
 import time
 import pymysql
 import telegram_send
+
+from connect_db import connect_db
+from convert_time import convert_time
+from alive import alive
+from my_clear import my_c
 from tqdm import tqdm
 from clickhouse_driver import Client
 
 
 tqdm.pandas()
-
-
-# Функция для очистки значения от лишних символов (пробелы, кавычки).
-def my_c(i):
-    i = i.strip().strip("''").strip('""')
-    return i
-
-
-# Функция для отображения статуса. Необходимо передать очередь и последний шаг.
-def my_status(ochered, key):
-    for now in status_dict[ochered].keys():
-        if key in now.split(','):
-            return status[status_dict[ochered][now]]
 
 
 # Функция для проверки технической возможности.
@@ -49,16 +41,11 @@ def teh_v(ochered, route):
             return t_v
 
 
-# Функция для определения типа звонка.
-def alive(route):
-    # Мертвые шаги.
-    dead_steps = ['0', '1', '111', '261', '262']
-    # Если последний шаг в списке мертвых, то для звонка записываем 0.
-    if str(route).split(',')[-1] in dead_steps:
-        return 0
-    # Иначе для звонка записываем 1.
-    else:
-        return 1
+# Функция для отображения статуса. Необходимо передать очередь и последний шаг.
+def my_status(ochered, key):
+    for step_now in status_dict[ochered].keys():
+        if key in step_now.split(','):
+            return status[status_dict[ochered][step_now]]
 
 
 start_time = time.time()
@@ -72,139 +59,19 @@ telegram_send.send(messages=[f'Начало работы отчета №25 в: 
 report.write(
     f'Производится подключение к БД. Дата: {time.strftime("%d-%m-%Y")}. Время: {time.strftime("%X")}.\n')
 now_time = time.time()
-my_connect = pymysql.Connect(host="84.201.164.249", user="glotov", passwd="dZ23HJiNTlf8Jpk4YeafSOHVR2qB65gO",
+host, user, password = connect_db('Maria_db')
+my_connect = pymysql.Connect(host=host, user=user, passwd=password,
                              db="suitecrm",
                              charset='utf8')
-print(f'Подключение выполнено. Ушло времени: {round(time.time() - now_time, 3)} сек.')
-report.write(f'Подключение выполнено. Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+print(f'Подключение выполнено. Ушло времени: {convert_time(time.time() - now_time)}')
+report.write(f'Подключение выполнено. Ушло времени: {convert_time(time.time() - now_time)}\n')
 print()
 
-status = """
-select substring(turn, 11, 4) as ochered,
-       steps_autoanswer       as avtootvetchik,
-       steps_transferred      as perevod,
-       steps_refusing         as otkaz,
-       reset_greet            as sbros_na_privetsvii,
-       x_ptv                  as net_teh_vozmozhnosti,
-       have_ptv               as est_teh_vozmozhnost,
-       reset_pres             as sbros_na_presentacii,
-       is_subs                as yavlyaetsya_abonentom,
-       steps_inconvenient     as neudobno_govorit,
-       steps_error            as oshobka_razgovora
-from jc_robot_reportconfig
-where deleted = 0;
-"""
+status = open(r'C:\Users\Supervisor031\Отчеты\Отчет_25\SQL\Status.sql').read()
 
-my_request = """
-select phone_number,
-       assigned_user_id,
-       status as status_request,
-       date_reguest,
-       uniqueid,
-       ochered,
-       project
-from (select my_phone_work                                                as phone_number,
-             assigned_user_id,
-             status,
-             reguest.date                                                 as date_reguest,
-             new_rob.uniqueid,
-             new_rob.ochered,
-             new_rob.phone,
-             row_number() over (partition by phone order by my_date desc) as num,
-             project
-      from (select 'RTK'                                                                   project,
-                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                   date_entered + interval 2 hour                                       as date,
-                   assigned_user_id,
-                   status
-            from suitecrm.jc_meetings_rostelecom
-            where status != 'Error'
-              and date(date_entered) between '2022-05-20' and '2022-05-22'
-            union all
-            select 'Beeline'                                                               project,
-                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                   date_entered + interval 2 hour                                       as date,
-                   assigned_user_id,
-                   status
-            from suitecrm.jc_meetings_beeline
-            where status != 'Error'
-              and date(date_entered) between '2022-05-20' and '2022-05-22'
-            union all
-            select project,
-                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                   date_entered + interval 2 hour                                       as date,
-                   assigned_user_id,
-                   status
-            from suitecrm.jc_meetings_domru
-            where status != 'Error'
-              and date(date_entered) between '2022-05-20' and '2022-05-22'
-            union all
-            select project,
-                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                   date_entered + interval 2 hour                                       as date,
-                   assigned_user_id,
-                   status
-            from suitecrm.jc_meetings_ttk
-            where status != 'Error'
-              and date(date_entered) between '2022-05-20' and '2022-05-22'
-            union all
-            select 'NBN'                                                                   project,
-                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                   date_entered + interval 2 hour                                       as date,
-                   assigned_user_id,
-                   status
-            from suitecrm.jc_meetings_netbynet
-            where status != 'Error'
-              and date(date_entered) between '2022-05-20' and '2022-05-22'
-            union all
-            select project,
-                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                   date_entered + interval 2 hour                                       as date,
-                   assigned_user_id,
-                   status
-            from suitecrm.jc_meetings_mts jc_meetings_mts
-            where status != 'Error'
-              and date(date_entered) between '2022-05-20' and '2022-05-22'
-            union all
-            select project,
-                   concat(8, right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                   date_entered + interval 2 hour                                       as date,
-                   assigned_user_id,
-                   status
-            from suitecrm.jc_meetings_beeline_mnp
-            where status != 'Error'
-              and date(date_entered) between '2022-05-20' and '2022-05-22') as reguest
-               left join
-           (select call_date + interval 2 hour as my_date,
-                   uniqueid,
-                   substring(dialog, 11, 4)    as ochered,
-                   phone
-            from suitecrm_robot.jc_robot_log
-            where date(call_date) >= date(now()) - interval 90 day) as new_rob
-           on reguest.my_phone_work = new_rob.phone) as total
-where num = 1;
-"""
+my_request = open(r'C:\Users\Supervisor031\Отчеты\Отчет_25\SQL\My_request_yesterday_window.sql').read()
 
-total_calls = """
-select call_date + interval 2 hour as my_date,
-       uniqueid,
-       substring(dialog, 11, 4)    as ochered,
-       last_step,
-       route,
-       billsec,
-       client_status,
-       otkaz,
-       directory,
-       server_number,
-       city_c,
-       ptv_c,
-       marker,
-       was_repeat,
-       phone
-from suitecrm_robot.jc_robot_log
-where date(call_date) between '2022-05-20' and '2022-05-22';
-"""
-
+total_calls = open(r'C:\Users\Supervisor031\Отчеты\Отчет_25\SQL\Total_calls_yesterday.sql').read()
 
 try:
     print('Чтение SQL запросов и занесение в ДФ.')
@@ -214,24 +81,24 @@ try:
     report.write('Запрос из Status.sql заносится в ДФ.\n')
     now_time = time.time()
     df_st = pd.read_sql_query(status, my_connect)
-    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
-    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print(f'Ушло времени: {convert_time(time.time() - now_time)}')
+    report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
 
     print('Запрос из My_request.sql заносится в ДФ.')
     report.write('Запрос из My_request.sql заносится в ДФ.\n')
     now_time = time.time()
     df_req = pd.read_sql_query(my_request, my_connect)
-    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
-    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print(f'Ушло времени: {convert_time(time.time() - now_time)}')
+    report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
 
     print('Запрос из Total_calls.sql заносится в ДФ.')
     report.write('Запрос из Total_calls.sql заносится в ДФ.\n')
     now_time = time.time()
     df_calls = pd.read_sql_query(total_calls, my_connect)
-    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
-    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print(f'Ушло времени: {convert_time(time.time() - now_time)}')
+    report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
 
 except:
@@ -241,10 +108,8 @@ except:
     report.write('Произошла ошибка чтения SQL запросов и занесения в ДФ.\n')
     end_time = time.time()
     total_time = end_time - start_time
-    my_min = int(total_time // 60)
-    my_sec = round(total_time % 60, 3)
-    print(f'Общее время обработки и создания файлов составило: {my_min} мин., {my_sec} сек.')
-    report.write(f'Общее время обработки и создания файлов составило: {my_min} мин., {my_sec} сек.\n')
+    print(f'Общее время обработки и создания файлов составило: {total_time}')
+    report.write(f'Общее время обработки и создания файлов составило: {total_time}\n')
     report.write(end)
     report.write('\n')
     report.close()
@@ -255,8 +120,8 @@ else:
     now_time = time.time()
     to_st = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Status.csv'
     df_st.to_csv(to_st, index=False, sep=';', encoding='utf-8')
-    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
-    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print(f'Ушло времени: {convert_time(time.time() - now_time)}')
+    report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
 
     print('ДФ из запроса My_request.sql записывается в файл.')
@@ -264,8 +129,8 @@ else:
     now_time = time.time()
     to_req = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\My_request.csv'
     df_req.to_csv(to_req, index=False, sep=';', encoding='utf-8')
-    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
-    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print(f'Ушло времени: {convert_time(time.time() - now_time)}')
+    report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
 
     print('ДФ из запроса Total_calls.sql записывается в файл.')
@@ -273,8 +138,8 @@ else:
     now_time = time.time()
     to_calls = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Total_calls.csv'
     df_calls.to_csv(to_calls, index=False, sep=';', encoding='utf-8')
-    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
-    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print(f'Ушло времени: {convert_time(time.time() - now_time)}')
+    report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
 
 
@@ -311,7 +176,7 @@ else:
                     # Запись в файл. Очередь, последний шаг, статус.
                     to_file.write(f'{now};{last_step};{my_status(now, last_step)}\n')
 
-    print(f'Время обработки, создания и записи файла составило: {round(time.time() - status_time, 3)} сек.')
+    print(f'Время обработки, создания и записи файла составило: {convert_time(time.time() - status_time)}')
     print()
 
 
@@ -342,8 +207,9 @@ else:
                     est_tehv[o] = set()
                     est_tehv[o].add(step)
 
-    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
+    print(f'Ушло времени: {convert_time(time.time() - status_time)}')
     print()
+
 
     print(f'Открытие файлов начато в: {time.strftime("%X")}.')
     report.write(f'Открытие файлов начато в: {time.strftime("%X")}.\n')
@@ -369,8 +235,8 @@ else:
     print('Открытие файла со статусами.')
     # Открытие файла со статусами.
     right = pd.read_csv(r_f, sep=';')
-    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
-    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print(f'Ушло времени: {convert_time(time.time() - now_time)}')
+    report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
 
     print(f'Создание нового столбца "Техническая возможность" начато в: {time.strftime("%X")}.')
@@ -403,7 +269,7 @@ else:
     result = result.astype({'alive': 'int64'})
     # Переименовал столбец "Область" в "region".
     result.rename(columns={'Область': 'region'}, inplace=True)
-    print(f'На слияние таблиц ушло времени: {round(time.time() - now_time, 3)} сек.')
+    print(f'На слияние таблиц ушло времени: {convert_time(time.time() - now_time)}')
     print()
 
     # Вывод информации об итоговом ДФ.
@@ -418,14 +284,15 @@ else:
     result.to_csv(to_file, index=False, sep=';', encoding='utf-8')
     print(f'Создан файл {to_file} в: {time.strftime("%X")}.')
     report.write(f'Создан файл {to_file} в: {time.strftime("%X")}.\n')
-    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
-    report.write(f'Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print(f'Ушло времени: {convert_time(time.time() - now_time)}')
+    report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
 
 
     pd.options.mode.chained_assignment = None
 
-    client = Client(host='192.168.1.99', port='9000', user='default', password='jdfwl6812hwe',
+    host, user, password = connect_db('Click')
+    client = Client(host=host, port='9000', user=user, password=password,
                     database='suitecrm_robot_ch', settings={'use_numpy': True})
 
     print(f'Чтение файла F_result.csv начато в: {time.strftime("%X")}.')
@@ -435,13 +302,14 @@ else:
     print('Файл прочитан.')
     print('Производится запись файла в БД.')
     client.insert_dataframe('INSERT INTO suitecrm_robot_ch.otchet_25 VALUES',
-                            df[['my_date', 'uniqueid', 'ochered', 'last_step', 'route', 'billsec', 'client_status', 'otkaz',
+                            df[['my_date', 'uniqueid', 'ochered', 'last_step', 'route', 'billsec', 'client_status',
+                                'otkaz',
                                 'directory',
                                 'server_number', 'city_c', 'ptv_c', 'marker', 'was_repeat', 'phone', 'teh_vozmozhnost',
                                 'region',
                                 'status', 'alive']])
-    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
-    report.write(f'Файл занесен в БД. Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print(f'Ушло времени: {convert_time(time.time() - now_time)}')
+    report.write(f'Файл занесен в БД. Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
 
 
@@ -454,18 +322,16 @@ else:
     client.insert_dataframe('INSERT INTO suitecrm_robot_ch.request_25 VALUES',
                             df[['phone_number', 'assigned_user_id', 'status_request', 'date_reguest', 'uniqueid',
                                 'ochered', 'project']])
-    print(f'Ушло времени: {round(time.time() - now_time, 3)} сек.')
-    report.write(f'Файл занесен в БД. Ушло времени: {round(time.time() - now_time, 3)} сек.\n')
+    print(f'Ушло времени: {convert_time(time.time() - now_time)}')
+    report.write(f'Файл занесен в БД. Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
 
     end_time = time.time()
     total_time = end_time - start_time
-    my_min = int(total_time // 60)
-    my_sec = round(total_time % 60, 3)
-    print(f'Общее время обработки и создания файлов составило: {my_min} мин., {my_sec} сек.')
+    print(f'Общее время обработки и создания файлов составило: {convert_time(total_time)}')
     telegram_send.send(messages=[f'Отчет №25 выполнен.\n'
-                                 f'Общее время работы составило: {my_min} мин., {my_sec} сек.'])
-    report.write(f'Общее время обработки и создания файлов составило: {my_min} мин., {my_sec} сек.\n')
+                                 f'Общее время работы составило: {convert_time(total_time)}'])
+    report.write(f'Общее время обработки и создания файлов составило: {convert_time(total_time)}\n')
     report.write(end)
     report.write('\n')
     report.close()
