@@ -9,17 +9,14 @@ with open('my_del.txt', 'a') as file:
                     database='suitecrm_robot_ch', settings={'use_numpy': True})
 
     file.write(f'Удаление значений из otchet_25 начато в: {time.strftime("%X")}.\n')
-    client.execute("alter table otchet_25 delete where toDate(my_date) between '2022-05-20' and '2022-05-25';")
+    client.execute("alter table otchet_25 delete where toDate(my_date) between '2022-05-27' and '2022-05-30';")
     file.write(f'Удаление значений из otchet_25 закончено в: {time.strftime("%X")}.\n')
 
     file.write(f'Удаление значений из request_25 начато в: {time.strftime("%X")}.\n')
-    client.execute("alter table request_25 delete where toDate(date_reguest) between '2022-05-20' and '2022-05-25';")
+    client.execute("alter table request_25 delete where toDate(date_reguest) between '2022-05-27' and '2022-05-30';")
     file.write(f'Удаление значений из request_25 закончено в: {time.strftime("%X")}.\n')
 
     file.write(f'Конец работы: {time.strftime("%X")}.\n')
     file.write(f'Затрачено времени: {round(time.time() - start_time, 3)} сек.\n')
 
     file.write('-\n')
-
-# select count(uniqueid) from otchet_25 where my_date = toDate('2022-03-29'); - 1168839
-# select count(uniqueid) from request_25 where my_date = toDate('2022-03-29'); - 681

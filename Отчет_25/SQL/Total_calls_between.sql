@@ -14,4 +14,4 @@ select call_date + interval 2 hour as my_date,
        was_repeat,
        phone
 from suitecrm_robot.jc_robot_log
-where date(call_date) between '2022-04-21' and '2022-04-27';
+where date(call_date) between '2022-05-27' and '2022-05-29';
