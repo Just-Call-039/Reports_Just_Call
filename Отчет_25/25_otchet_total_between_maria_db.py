@@ -230,7 +230,7 @@ else:
 
     print('Открытие файла с регионами.')
     # Открытие файла с регионами.
-    city = pd.read_excel(r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Макрорегионы.xlsx')
+    city = pd.read_excel(r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Макрорегионы.xlsx', 0)
 
     print('Открытие файла со статусами.')
     # Открытие файла со статусами.
