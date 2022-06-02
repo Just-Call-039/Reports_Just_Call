@@ -4,9 +4,9 @@ import time
 import pymysql
 import telegram_send
 
-from connect_db import connect_db
+from commons.connect_db import connect_db
 from commons.clear_file import clear_file
-from convert_time import convert_time
+from commons.convert_time import convert_time
 
 
 start_time = time.time()
