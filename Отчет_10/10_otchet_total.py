@@ -5,7 +5,7 @@ import pymysql
 import telegram_send
 
 from connect_db import connect_db
-from clear_file import clear_file
+from commons.clear_file import clear_file
 from convert_time import convert_time
 
 

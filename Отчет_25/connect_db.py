@@ -4,6 +4,7 @@
 
 
 def connect_db(file):
+    dest = None
     if file == 'Maria_db':
         dest = r'C:\Users\Supervisor031\Отчеты\Maria_db.csv'
     elif file == '72':
@@ -15,14 +16,15 @@ def connect_db(file):
     else:
         print('Неизвестный сервер.')
 
-    with open(dest) as file:
-        for now in file:
-            now = now.strip().split('=')
-            first, second = now[0].strip(), now[1].strip()
-            if first == 'host':
-                host = second
-            elif first == 'user':
-                user = second
-            elif first == 'password':
-                password = second
-    return host, user, password
+    if dest:
+        with open(dest) as file:
+            for now in file:
+                now = now.strip().split('=')
+                first, second = now[0].strip(), now[1].strip()
+                if first == 'host':
+                    host = second
+                elif first == 'user':
+                    user = second
+                elif first == 'password':
+                    password = second
+        return host, user, password
