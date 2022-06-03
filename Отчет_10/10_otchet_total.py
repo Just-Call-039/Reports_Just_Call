@@ -4,9 +4,9 @@ import time
 import pymysql
 import telegram_send
 
-from commons.connect_db import connect_db
-from commons.clear_file import clear_file
-from commons.convert_time import convert_time
+from connect_db import connect_db
+from clear_file import clear_file
+from convert_time import convert_time
 
 
 start_time = time.time()
@@ -20,7 +20,7 @@ telegram_send.send(messages=[f'Начало работы отчета №10 в: 
 report.write(
     f'Производится подключение к БД. Дата: {time.strftime("%d-%m-%Y")}. Время: {time.strftime("%X")}.\n')
 now_time = time.time()
-host, user, password = connect_db('Maria_db')
+host, user, password = connect_db('72')
 my_connect = pymysql.Connect(host=host, user=user, passwd=password,
                              db="suitecrm",
                              charset='utf8')

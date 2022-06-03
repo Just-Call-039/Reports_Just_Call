@@ -3,10 +3,10 @@ import time
 import pymysql
 import telegram_send
 
-from commons.connect_db import connect_db
-from commons.convert_time import convert_time
-from commons.alive import alive
-from commons.my_clear import my_c
+from connect_db import connect_db
+from convert_time import convert_time
+from alive import alive
+from my_clear import my_c
 from tqdm import tqdm
 from clickhouse_driver import Client
 
@@ -59,7 +59,7 @@ telegram_send.send(messages=[f'Начало работы отчета №25 в: 
 report.write(
     f'Производится подключение к БД. Дата: {time.strftime("%d-%m-%Y")}. Время: {time.strftime("%X")}.\n')
 now_time = time.time()
-host, user, password = connect_db('Maria_db')
+host, user, password = connect_db('72')
 my_connect = pymysql.Connect(host=host, user=user, passwd=password,
                              db="suitecrm",
                              charset='utf8')

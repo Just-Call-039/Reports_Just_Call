@@ -3,10 +3,10 @@ import time
 import pymysql
 import telegram_send
 
-from commons.connect_db import connect_db
-from commons.convert_time import convert_time
-from commons.alive import alive
-from commons.my_clear import my_c
+from connect_db import connect_db
+from convert_time import convert_time
+from alive import alive
+from my_clear import my_c
 from tqdm import tqdm
 from clickhouse_driver import Client
 
