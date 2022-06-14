@@ -4,9 +4,9 @@ import time
 import pymysql
 import telegram_send
 
-from connect_db import connect_db
-from clear_file import clear_file
-from convert_time import convert_time
+from commons.connect_db import connect_db
+from commons.clear_file import clear_file
+from commons.convert_time import convert_time
 
 
 start_time = time.time()
@@ -20,7 +20,7 @@ telegram_send.send(messages=[f'Начало работы отчета №10 в: 
 report.write(
     f'Производится подключение к БД. Дата: {time.strftime("%d-%m-%Y")}. Время: {time.strftime("%X")}.\n')
 now_time = time.time()
-host, user, password = connect_db('72')
+host, user, password = connect_db('Maria_db')
 my_connect = pymysql.Connect(host=host, user=user, passwd=password,
                              db="suitecrm",
                              charset='utf8')
@@ -93,7 +93,7 @@ else:
     report.write('ДФ из запроса All_users.sql записывается в файл.\n')
     now_time = time.time()
     to_all_us = r'C:\Users\Supervisor031\Отчеты\Отчет_10\Files\All_users.csv'
-    to_all_us_copy = r'\\10.88.22.128\dbs\report_10\All_users.csv'
+    to_all_us_copy = r'\\10.88.22.128\dbs\10_report\All_users.csv'
     df_all_us.to_csv(to_all_us, index=False, sep=';', encoding='utf-8')
     print('Копирование файла All_users.csv в сетевое расположение.')
     report.write('Копирование файла All_users.csv в сетевое расположение.\n')
@@ -106,7 +106,7 @@ else:
     report.write('ДФ из запроса Super.sql записывается в файл.\n')
     now_time = time.time()
     to_my_sup = r'C:\Users\Supervisor031\Отчеты\Отчет_10\Files\Super.csv'
-    to_my_sup_copy = r'\\10.88.22.128\dbs\report_10\Super.csv'
+    to_my_sup_copy = r'\\10.88.22.128\dbs\10_report\Super.csv'
     df_my_sup.to_csv(to_my_sup, index=False, sep=';', encoding='utf-8')
     print('Копирование файла Super.csv в сетевое расположение.')
     report.write('Копирование файла Super.csv в сетевое расположение.\n')
@@ -119,7 +119,7 @@ else:
     report.write('ДФ из запроса Total_calls.sql записывается в файл.\n')
     now_time = time.time()
     to_total_calls = r'C:\Users\Supervisor031\Отчеты\Отчет_10\Files\Total_calls.csv'
-    to_total_calls_copy = r'\\10.88.22.128\dbs\report_10\Total_calls.csv'
+    to_total_calls_copy = r'\\10.88.22.128\dbs\10_report\Total_calls.csv'
     df_total_calls.to_csv(to_total_calls, index=False, sep=';', encoding='utf-8')
     print('Копирование файла Total_calls.csv в сетевое расположение.')
     report.write('Копирование файла Total_calls.csv в сетевое расположение.\n')
@@ -132,7 +132,7 @@ else:
     report.write('ДФ из запроса Total_calls_31d.sql записывается в файл.\n')
     now_time = time.time()
     to_calls_31d = r'C:\Users\Supervisor031\Отчеты\Отчет_10\Files\Total_calls_31d.csv'
-    to_calls_31d_copy = r'\\10.88.22.128\dbs\report_10\Total_calls_31d.csv'
+    to_calls_31d_copy = r'\\10.88.22.128\dbs\10_report\Total_calls_31d.csv'
     df_calls_31d.to_csv(to_calls_31d, index=False, sep=';', encoding='utf-8')
     print('Копирование файла Total_calls_31d.csv в сетевое расположение.')
     report.write('Копирование файла Total_calls_31d.csv в сетевое расположение.\n')
@@ -145,7 +145,7 @@ else:
     report.write('Обработка пользователей из файла Super.csv.\n')
     clear_file(to_my_sup)
     to_my_sup_clear = r'C:\Users\Supervisor031\Отчеты\Отчет_10\Files\Super_clear.csv'
-    to_my_sup_clear_copy = r'\\10.88.22.128\dbs\report_10\Super_clear.csv'
+    to_my_sup_clear_copy = r'\\10.88.22.128\dbs\10_report\Super_clear.csv'
     print('Копирование файла Super_clear.csv в сетевое расположение.')
     report.write('Копирование файла Super_clear.csv в сетевое расположение.\n')
     shutil.copyfile(to_my_sup_clear, to_my_sup_clear_copy)
@@ -155,7 +155,7 @@ else:
     report.write('Обработка пользователей из файла All_users.csv.\n')
     clear_file(to_all_us)
     to_all_us_clear = r'C:\Users\Supervisor031\Отчеты\Отчет_10\Files\All_users_clear.csv'
-    to_all_us_clear_copy = r'\\10.88.22.128\dbs\report_10\All_users_clear.csv'
+    to_all_us_clear_copy = r'\\10.88.22.128\dbs\10_report\All_users_clear.csv'
     print('Копирование файла Super_clear.csv в сетевое расположение.')
     report.write('Копирование файла Super_clear.csv в сетевое расположение.\n')
     shutil.copyfile(to_all_us_clear, to_all_us_clear_copy)
