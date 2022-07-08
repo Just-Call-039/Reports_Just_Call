@@ -43,7 +43,7 @@ def clear_file(my_file):
                     # Статус - уволен.
                     status = 'dismissed'
                     # Делим строку с именем по пробелу и "_".
-                    first = re.split(r'[ _]', first)
+                    first = re.split(r'[ _-]', first)
                     # Пробегаем по каждому слову в имени.
                     for word in first:
                         # И по каждой букве в слове.
@@ -70,15 +70,15 @@ def clear_file(my_file):
                     # Статус - работает.
                     status = 'working'
                     # Делим строку с именем по пробелу и "_".
-                    first = re.split(r'[ _]', first)
+                    first = re.split(r'[ _-]', first)
                     # Если длина строки == 1, в строке содержится только имя. Группа отсутствует.
                     if len(first) == 1:
                         name = first[0].strip()
                         group = 'unknown_group'
                     # Иначе, извлекаем имя и группу.
                     else:
-                        name = first[1]
-                        group = first[0]
+                        name = first[-1]
+                        group = first[-2]
 
                 # Проверка значений на пустые данные.
                 if my_id is None or my_id == '' or my_id == ' ':
