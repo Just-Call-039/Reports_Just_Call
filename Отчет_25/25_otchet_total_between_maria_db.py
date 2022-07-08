@@ -108,8 +108,8 @@ except:
     report.write('Произошла ошибка чтения SQL запросов и занесения в ДФ.\n')
     end_time = time.time()
     total_time = end_time - start_time
-    print(f'Общее время обработки и создания файлов составило: {total_time}')
-    report.write(f'Общее время обработки и создания файлов составило: {total_time}\n')
+    print(f'Общее время обработки и создания файлов составило: {convert_time(total_time)}')
+    report.write(f'Общее время обработки и создания файлов составило: {convert_time(total_time)}\n')
     report.write(end)
     report.write('\n')
     report.close()
