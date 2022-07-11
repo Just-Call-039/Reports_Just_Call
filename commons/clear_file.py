@@ -79,7 +79,7 @@ def clear_file(my_file):
                     # Иначе, извлекаем имя и группу.
                     else:
                         name = my_c(first[-1])
-                        group = first[-2]
+                        group = my_c(first[-2])
 
                 # Проверка значений на пустые данные.
                 if my_id is None or my_id == '' or my_id == ' ':
