@@ -4,7 +4,7 @@
 def clear_file(my_file):
     import time
     import re
-    from my_clear import my_c
+    from commons.my_clear import my_c
 
     start_clear = time.time()
     step = 0
