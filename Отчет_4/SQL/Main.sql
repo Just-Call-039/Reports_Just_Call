@@ -8,6 +8,11 @@ select cl.id,
        if((cl.assigned_user_id in ('', ' ') or cl.assigned_user_id is null), 'unknown_id',
           cl.assigned_user_id)                                                                   as user_call,
        if((cl_c.user_id_c in ('', ' ') or cl_c.user_id_c is null), 'unknown_id', cl_c.user_id_c) as super,
+       case
+           when city_c is null then concat(town_c, 'OBL')
+           when city_c in ('', ' ') then concat(town_c, 'OBL')
+           else city_c
+           end                                                                                   as city,
        duration_minutes                                                                          as call_sec,
 #        cl.duration_minutes div 60                                                                as call_min,
 #        cl.duration_minutes % 60                                                                  as call_sec,
@@ -19,11 +24,14 @@ select cl.id,
        temp_req.status
 from suitecrm.calls as cl
          inner join suitecrm.calls_cstm as cl_c on cl.id = cl_c.id_c
+         left join suitecrm.contacts on cl_c.asterisk_caller_id_c = contacts.phone_work
+         left join suitecrm.contacts_cstm on contacts_cstm.id_c = contacts.id
          left join (with phone_number as (select *
                                           from (select cl.id,
                                                        cl_c.asterisk_caller_id_c,
-                                                       date(cl.date_entered)                                                       as call_date,
-                                                       row_number() over (partition by asterisk_caller_id_c order by date_entered) as num
+                                                       date(cl.date_entered)                                                  as call_date,
+                                                       row_number()
+                                                               over (partition by asterisk_caller_id_c order by date_entered) as num
                                                 from suitecrm.calls as cl
                                                          left join suitecrm.calls_cstm as cl_c on cl.id = cl_c.id_c
                                                 where (date(date_entered) between date(now()) - interval 70 day and date(now()) - interval 1 day)

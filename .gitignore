@@ -1,7 +1,9 @@
-# created by virtualenv automatically
+# My ignore list.
 *.csv
 *.jpg
 *.zip
 *.pbix
 *.xlsx
 /not_share
+/venv
+

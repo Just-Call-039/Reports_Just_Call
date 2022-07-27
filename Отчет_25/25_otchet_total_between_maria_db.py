@@ -49,7 +49,7 @@ def my_status(ochered, key):
 
 
 start_time = time.time()
-report = open(r'C:\Users\Supervisor031\Отчеты\Отчет_25\report_25.txt', 'a')
+report = open(r'D:\Отчеты\Отчет_25\report_25.txt', 'a')
 start = '--------------start--------------\n'
 end = '---------------end---------------\n'
 report.write(start)
@@ -67,11 +67,11 @@ print(f'Подключение выполнено. Ушло времени: {con
 report.write(f'Подключение выполнено. Ушло времени: {convert_time(time.time() - now_time)}\n')
 print()
 
-status = open(r'C:\Users\Supervisor031\Отчеты\Отчет_25\SQL\Status.sql').read()
+status = open(r'D:\Отчеты\Отчет_25\SQL\Status.sql').read()
 
-my_request = open(r'C:\Users\Supervisor031\Отчеты\Отчет_25\SQL\My_request_between_window.sql').read()
+my_request = open(r'D:\Отчеты\Отчет_25\SQL\My_request_between_window.sql').read()
 
-total_calls = open(r'C:\Users\Supervisor031\Отчеты\Отчет_25\SQL\Total_calls_between.sql').read()
+total_calls = open(r'D:\Отчеты\Отчет_25\SQL\Total_calls_between.sql').read()
 
 try:
     print('Чтение SQL запросов и занесение в ДФ.')
@@ -118,7 +118,7 @@ else:
     print('ДФ из запроса Status.sql записывается в файл.')
     report.write('ДФ из запроса Status.sql записывается в файл.\n')
     now_time = time.time()
-    to_st = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Status.csv'
+    to_st = r'D:\Отчеты\Отчет_25\Files\Status.csv'
     df_st.to_csv(to_st, index=False, sep=';', encoding='utf-8')
     print(f'Ушло времени: {convert_time(time.time() - now_time)}')
     report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
@@ -127,7 +127,7 @@ else:
     print('ДФ из запроса My_request.sql записывается в файл.')
     report.write('ДФ из запроса My_request.sql записывается в файл.\n')
     now_time = time.time()
-    to_req = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\My_request.csv'
+    to_req = r'D:\Отчеты\Отчет_25\Files\My_request.csv'
     df_req.to_csv(to_req, index=False, sep=';', encoding='utf-8')
     print(f'Ушло времени: {convert_time(time.time() - now_time)}')
     report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
@@ -136,7 +136,7 @@ else:
     print('ДФ из запроса Total_calls.sql записывается в файл.')
     report.write('ДФ из запроса Total_calls.sql записывается в файл.\n')
     now_time = time.time()
-    to_calls = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Total_calls.csv'
+    to_calls = r'D:\Отчеты\Отчет_25\Files\Total_calls.csv'
     df_calls.to_csv(to_calls, index=False, sep=';', encoding='utf-8')
     print(f'Ушло времени: {convert_time(time.time() - now_time)}')
     report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
@@ -144,7 +144,7 @@ else:
 
 
     status_time = time.time()
-    to_file = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Status_dict.csv'
+    to_file = r'D:\Отчеты\Отчет_25\Files\Status_dict.csv'
     print(f'Создан файл со статусами {to_file}.')
     print('Производится запись статусов в файл.')
     status_dict = {}
@@ -190,7 +190,7 @@ else:
     # Открытие файла со статусами.
     # Находим статусы "Нет технической возможности" или "Есть техническая возможность".
     # Записываем в соответсвующий словарь пары ключ - очередь, а для него значение - конкретный шаг.
-    with open(r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Status_dict.csv') as status:
+    with open(r'D:\Отчеты\Отчет_25\Files\Status_dict.csv') as status:
         for now in status:
             now = now.split(';')
             o, step, stat = now[0].strip(), now[1].strip(), now[2].strip()
@@ -217,11 +217,11 @@ else:
 
     # Файл БД из запроса "Total_calls.sql".
     # l_f = input('Введите название и расширение файла БД на чтение: ')
-    l_f = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Total_calls.csv'
+    l_f = r'D:\Отчеты\Отчет_25\Files\Total_calls.csv'
 
     # Файл со статусами из "Создание словаря для статусов".
     # r_f = input('Введите название и расширение файла со статусами на чтение: ')
-    r_f = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Status_dict.csv'
+    r_f = r'D:\Отчеты\Отчет_25\Files\Status_dict.csv'
 
     print('Открытие файла БД из запроса "Total_calls.sql".')
     # Открытие файла БД из запроса "Total_calls.sql".
@@ -230,7 +230,7 @@ else:
 
     print('Открытие файла с регионами.')
     # Открытие файла с регионами.
-    city = pd.read_excel(r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\Макрорегионы.xlsx', 0)
+    city = pd.read_excel(r'D:\Отчеты\Отчет_25\Files\Макрорегионы.xlsx', 0)
 
     print('Открытие файла со статусами.')
     # Открытие файла со статусами.
@@ -280,7 +280,7 @@ else:
     report.write(f'Запись итогового ДФ в файл начата в: {time.strftime("%X")}.\n')
     now_time = time.time()
     # Запись ДФ в файл.
-    to_file = r'C:\Users\Supervisor031\Отчеты\Отчет_25\Files\F_result.csv'
+    to_file = r'D:\Отчеты\Отчет_25\Files\F_result.csv'
     result.to_csv(to_file, index=False, sep=';', encoding='utf-8')
     print(f'Создан файл {to_file} в: {time.strftime("%X")}.')
     report.write(f'Создан файл {to_file} в: {time.strftime("%X")}.\n')
