@@ -1,6 +1,6 @@
 # Функция для извлечения хоста, логина, пароля.
 # Необходимо передать файл с соответствующим наименованием.
-# Maria_db, 72, Combat, Click, Server_MySQL.
+# Maria_db, 72, Combat, Click, Server_MySQL, DBS.
 
 
 def connect_db(file):
@@ -15,6 +15,8 @@ def connect_db(file):
         dest = r'D:\Отчеты\not_share\ClickHouse.csv'
     elif file == 'Server_MySQL':
         dest = r'D:\Отчеты\not_share\Server_files_MySQL.csv'
+    elif file == 'DBS':
+        dest = r'D:\Отчеты\not_share\DBS.csv'
     else:
         print('Неизвестный сервер.')
 
