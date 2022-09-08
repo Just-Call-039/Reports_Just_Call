@@ -3,12 +3,14 @@ select case
                then 'unknown_id'
            else cl_1.assigned_user_id end as user,
        case
-           when cl.queue_c is null or cl.queue_c = '' or cl.queue_c = ' ' then 'unknown_queue'
+           when cl.queue_c is null or cl.queue_c = '' or cl.queue_c = ' '
+               then 'unknown_queue'
            else cl.queue_c end            as queue,
        cl.otkaz_c                         as ref,
        date(cl_1.date_entered)            as calls_date,
        case
-           when cl.user_id_c is null or cl.user_id_c = '' or cl.user_id_c = ' ' then 'unknown_id'
+           when cl.user_id_c is null or cl.user_id_c = '' or cl.user_id_c = ' '
+               then 'unknown_id'
            else cl.user_id_c end          as super,
        case
            when city_c is null then concat(town_c, 'OBL')
