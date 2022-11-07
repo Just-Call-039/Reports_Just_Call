@@ -9,5 +9,5 @@ select substring(turn, 11, 4) as ochered,
        is_subs                as yavlyaetsya_abonentom,
        steps_inconvenient     as neudobno_govorit,
        steps_error            as oshobka_razgovora
-from jc_robot_reportconfig
+from suitecrm.jc_robot_reportconfig
 where deleted = 0;
