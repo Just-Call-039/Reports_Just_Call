@@ -1,0 +1,93 @@
+with requests as (select 'RTK'                                                             as project,
+                         concat(8,
+                                right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                         date(date_entered)                                                as date,
+                         assigned_user_id                                                  as user,
+                         user_id_c                                                         as super,
+                         status
+                  from suitecrm.jc_meetings_rostelecom as r
+                           left join suitecrm.jc_meetings_rostelecom_cstm as r_c on r.id = r_c.id_c
+                  where status != 'Error'
+                    and month(date(date_entered)) = month(date(now()))
+                    and year(date(date_entered)) = year(date(now()))
+                  union all
+                  select 'Beeline'                                                         as project,
+                         concat(8,
+                                right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                         date(date_entered)                                                as date,
+                         assigned_user_id                                                  as user,
+                         user_id_c                                                         as super,
+                         status
+                  from suitecrm.jc_meetings_beeline as b
+                           left join suitecrm.jc_meetings_beeline_cstm as b_c on b.id = b_c.id_c
+                  where status != 'Error'
+                    and month(date(date_entered)) = month(date(now()))
+                    and year(date(date_entered)) = year(date(now()))
+                  union all
+                  select 'DOMRU'                                                           as project,
+                         concat(8,
+                                right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                         date(date_entered)                                                as date,
+                         assigned_user_id                                                  as user,
+                         user_id_c                                                         as super,
+                         status
+                  from suitecrm.jc_meetings_domru as d
+                           left join suitecrm.jc_meetings_domru_cstm as d_c on d.id = d_c.id_c
+                  where status != 'Error'
+                    and month(date(date_entered)) = month(date(now()))
+                    and year(date(date_entered)) = year(date(now()))
+                  union all
+                  select 'TTK'                                                             as project,
+                         concat(8,
+                                right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                         date(date_entered)                                                as date,
+                         assigned_user_id                                                  as user,
+                         user_id_c                                                         as super,
+                         status
+                  from suitecrm.jc_meetings_ttk as t
+                           left join suitecrm.jc_meetings_ttk_cstm as t_c on t.id = t_c.id_c
+                  where status != 'Error'
+                    and month(date(date_entered)) = month(date(now()))
+                    and year(date(date_entered)) = year(date(now()))
+                  union all
+                  select 'NBN'                                                             as project,
+                         concat(8,
+                                right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                         date(date_entered)                                                as date,
+                         assigned_user_id                                                  as user,
+                         user_id_c                                                         as super,
+                         status
+                  from suitecrm.jc_meetings_netbynet as n
+                           left join suitecrm.jc_meetings_netbynet_cstm as n_c on n.id = n_c.id_c
+                  where status != 'Error'
+                    and month(date(date_entered)) = month(date(now()))
+                    and year(date(date_entered)) = year(date(now()))
+                  union all
+                  select 'MTS'                                                             as project,
+                         concat(8,
+                                right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
+                         date(date_entered)                                                as date,
+                         assigned_user_id                                                  as user,
+                         user_id_c                                                         as super,
+                         status
+                  from suitecrm.jc_meetings_mts as m
+                           left join suitecrm.jc_meetings_mts_cstm as m_c on m.id = m_c.id_c
+                  where status != 'Error'
+                    and month(date(date_entered)) = month(date(now()))
+                    and year(date(date_entered)) = year(date(now()))),
+
+     calls as (select *
+               from (select cl.id                                                                               as id_call,
+                            cl_c.asterisk_caller_id_c                                                           as phone_number,
+                            date(cl.date_entered)                                                               as call_date,
+                            cl_c.result_call_c,
+                            row_number() over (partition by cl_c.asterisk_caller_id_c order by cl.date_entered) as num
+                     from suitecrm.calls as cl
+                              left join suitecrm.calls_cstm as cl_c on cl.id = cl_c.id_c
+                     where (month(date(cl.date_entered)) = month(curdate()) and
+                            year(date(cl.date_entered)) = year(date(now())))) as temp
+               where num = 1)
+
+select *
+from requests
+         left join calls on requests.my_phone_work = calls.phone_number;
