@@ -1,7 +1,7 @@
 with requests as (select 'RTK'                                                             as project,
                          concat(8,
                                 right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                         date(date_entered)                                                as date,
+                         date(r.date_entered)                                              as request_date,
                          assigned_user_id                                                  as user,
                          user_id_c                                                         as super,
                          status
@@ -14,7 +14,7 @@ with requests as (select 'RTK'                                                  
                   select 'Beeline'                                                         as project,
                          concat(8,
                                 right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                         date(date_entered)                                                as date,
+                         date(b.date_entered)                                              as request_date,
                          assigned_user_id                                                  as user,
                          user_id_c                                                         as super,
                          status
@@ -27,7 +27,7 @@ with requests as (select 'RTK'                                                  
                   select 'DOMRU'                                                           as project,
                          concat(8,
                                 right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                         date(date_entered)                                                as date,
+                         date(d.date_entered)                                              as request_date,
                          assigned_user_id                                                  as user,
                          user_id_c                                                         as super,
                          status
@@ -40,7 +40,7 @@ with requests as (select 'RTK'                                                  
                   select 'TTK'                                                             as project,
                          concat(8,
                                 right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                         date(date_entered)                                                as date,
+                         date(t.date_entered)                                              as request_date,
                          assigned_user_id                                                  as user,
                          user_id_c                                                         as super,
                          status
@@ -53,7 +53,7 @@ with requests as (select 'RTK'                                                  
                   select 'NBN'                                                             as project,
                          concat(8,
                                 right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                         date(date_entered)                                                as date,
+                         date(n.date_entered)                                              as request_date,
                          assigned_user_id                                                  as user,
                          user_id_c                                                         as super,
                          status
@@ -66,7 +66,7 @@ with requests as (select 'RTK'                                                  
                   select 'MTS'                                                             as project,
                          concat(8,
                                 right(replace(replace(phone_work, ' ', ''), '-', ''), 10)) as my_phone_work,
-                         date(date_entered)                                                as date,
+                         date(m.date_entered)                                              as request_date,
                          assigned_user_id                                                  as user,
                          user_id_c                                                         as super,
                          status
