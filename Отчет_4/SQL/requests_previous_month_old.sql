@@ -14,8 +14,7 @@ with requests as (select 'RTK'                              as project,
                   from suitecrm.jc_meetings_rostelecom as r
                            left join suitecrm.jc_meetings_rostelecom_cstm as r_c on r.id = r_c.id_c
                   where status != 'Error'
-                    and day(date(date_entered)) != day(curdate())
-                    and month(date(date_entered)) = month(curdate())
+                    and month(date(date_entered)) = month(curdate() - interval 1 month)
                     and year(date(date_entered)) = year(curdate())
                   union all
                   select 'Beeline'                          as project,
@@ -34,8 +33,7 @@ with requests as (select 'RTK'                              as project,
                   from suitecrm.jc_meetings_beeline as b
                            left join suitecrm.jc_meetings_beeline_cstm as b_c on b.id = b_c.id_c
                   where status != 'Error'
-                    and day(date(date_entered)) != day(curdate())
-                    and month(date(date_entered)) = month(curdate())
+                    and month(date(date_entered)) = month(curdate() - interval 1 month)
                     and year(date(date_entered)) = year(curdate())
                   union all
                   select 'DOMRU'                            as project,
@@ -54,8 +52,7 @@ with requests as (select 'RTK'                              as project,
                   from suitecrm.jc_meetings_domru as d
                            left join suitecrm.jc_meetings_domru_cstm as d_c on d.id = d_c.id_c
                   where status != 'Error'
-                    and day(date(date_entered)) != day(curdate())
-                    and month(date(date_entered)) = month(curdate())
+                    and month(date(date_entered)) = month(curdate() - interval 1 month)
                     and year(date(date_entered)) = year(curdate())
                   union all
                   select 'TTK'                              as project,
@@ -74,8 +71,7 @@ with requests as (select 'RTK'                              as project,
                   from suitecrm.jc_meetings_ttk as t
                            left join suitecrm.jc_meetings_ttk_cstm as t_c on t.id = t_c.id_c
                   where status != 'Error'
-                    and day(date(date_entered)) != day(curdate())
-                    and month(date(date_entered)) = month(curdate())
+                    and month(date(date_entered)) = month(curdate() - interval 1 month)
                     and year(date(date_entered)) = year(curdate())
                   union all
                   select 'NBN'                              as project,
@@ -94,8 +90,7 @@ with requests as (select 'RTK'                              as project,
                   from suitecrm.jc_meetings_netbynet as n
                            left join suitecrm.jc_meetings_netbynet_cstm as n_c on n.id = n_c.id_c
                   where status != 'Error'
-                    and day(date(date_entered)) != day(curdate())
-                    and month(date(date_entered)) = month(curdate())
+                    and month(date(date_entered)) = month(curdate() - interval 1 month)
                     and year(date(date_entered)) = year(curdate())
                   union all
                   select 'MTS'                              as project,
@@ -114,8 +109,7 @@ with requests as (select 'RTK'                              as project,
                   from suitecrm.jc_meetings_mts as m
                            left join suitecrm.jc_meetings_mts_cstm as m_c on m.id = m_c.id_c
                   where status != 'Error'
-                    and day(date(date_entered)) != day(curdate())
-                    and month(date(date_entered)) = month(curdate())
+                    and month(date(date_entered)) = month(curdate() - interval 1 month)
                     and year(date(date_entered)) = year(curdate())),
 
      calls as (select *
@@ -123,16 +117,9 @@ with requests as (select 'RTK'                              as project,
                             cl_c.asterisk_caller_id_c                                                                as phone_number,
                             date(cl.date_entered)                                                                    as call_date,
                             cl_c.result_call_c,
-                            case
-                                when city_c is null then concat(town_c, 'OBL')
-                                when city_c in ('', ' ') then concat(town_c, 'OBL')
-                                else city_c
-                                end                                                                                  as city,
                             row_number() over (partition by cl_c.asterisk_caller_id_c order by cl.date_entered desc) as num
                      from suitecrm.calls as cl
                               left join suitecrm.calls_cstm as cl_c on cl.id = cl_c.id_c
-                              left join suitecrm.contacts on cl_c.asterisk_caller_id_c = contacts.phone_work
-                              left join suitecrm.contacts_cstm on contacts_cstm.id_c = contacts.id
                      where (date(now()) - interval 90 day <= date(cl.date_entered)
                          and date(cl.date_entered) <= date(now()) - interval 1 day)) as temp
                where num = 1)

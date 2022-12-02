@@ -112,7 +112,7 @@ with reguest as (select 'RTK'                                 project,
 
      new_rob as (select call_date + interval 2 hour as my_date, uniqueid, substring(dialog, 11, 4) as ochered, phone
                  from suitecrm_robot.jc_robot_log
-                 where date(call_date) >= date(now()) - interval 90 day)
+                 where date(call_date) >= date(now()) - interval 120 day)
 
 select phone_number,
        assigned_user_id,

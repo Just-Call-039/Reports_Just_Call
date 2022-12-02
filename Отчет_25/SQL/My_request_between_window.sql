@@ -12,7 +12,7 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_rostelecom
                  where status != 'Error'
-                   and date(date_entered) between '2022-11-04' and '2022-11-06'
+                   and date(date_entered) between '2022-10-21' and '2022-10-28'
                  union all
                  select 'Beeline'                             project,
                         if(length(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
@@ -28,7 +28,7 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_beeline
                  where status != 'Error'
-                   and date(date_entered) between '2022-11-04' and '2022-11-06'
+                   and date(date_entered) between '2022-10-21' and '2022-10-28'
                  union all
                  select project,
                         if(length(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
@@ -44,7 +44,7 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_domru
                  where status != 'Error'
-                   and date(date_entered) between '2022-11-04' and '2022-11-06'
+                   and date(date_entered) between '2022-10-21' and '2022-10-28'
                  union all
                  select project,
                         if(length(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
@@ -60,7 +60,7 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_ttk
                  where status != 'Error'
-                   and date(date_entered) between '2022-11-04' and '2022-11-06'
+                   and date(date_entered) between '2022-10-21' and '2022-10-28'
                  union all
                  select 'NBN'                                 project,
                         if(length(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
@@ -76,7 +76,7 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_netbynet
                  where status != 'Error'
-                   and date(date_entered) between '2022-11-04' and '2022-11-06'
+                   and date(date_entered) between '2022-10-21' and '2022-10-28'
                  union all
                  select project,
                         if(length(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
@@ -92,7 +92,7 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_mts jc_meetings_mts
                  where status != 'Error'
-                   and date(date_entered) between '2022-11-04' and '2022-11-06'
+                   and date(date_entered) between '2022-10-21' and '2022-10-28'
                  union all
                  select project,
                         if(length(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
@@ -108,10 +108,11 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_beeline_mnp
                  where status != 'Error'
-                   and date(date_entered) between '2022-11-04' and '2022-11-06')
-   , new_rob as (select call_date + interval 2 hour as my_date, uniqueid, substring(dialog, 11, 4) as ochered, phone
+                   and date(date_entered) between '2022-10-21' and '2022-10-28'),
+
+     new_rob as (select call_date + interval 2 hour as my_date, uniqueid, substring(dialog, 11, 4) as ochered, phone
                  from suitecrm_robot.jc_robot_log
-                 where date(call_date) >= date(now()) - interval 90 day)
+                 where date(call_date) >= date(now()) - interval 120 day)
 
 select phone_number,
        assigned_user_id,

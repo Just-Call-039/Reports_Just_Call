@@ -10,7 +10,6 @@ from commons.my_clear import my_c
 from tqdm import tqdm
 from clickhouse_driver import Client
 
-
 tqdm.pandas()
 
 
@@ -59,7 +58,7 @@ telegram_send.send(messages=[f'Начало работы отчета №25 в: 
 report.write(
     f'Производится подключение к БД. Дата: {time.strftime("%d-%m-%Y")}. Время: {time.strftime("%X")}.\n')
 now_time = time.time()
-host, user, password = connect_db('Maria_db')
+host, user, password = connect_db('cloud_117')
 my_connect = pymysql.Connect(host=host, user=user, passwd=password,
                              db="suitecrm",
                              charset='utf8')
@@ -142,7 +141,6 @@ else:
     report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
 
-
     status_time = time.time()
     to_file = r'D:\Отчеты\Отчет_25\Files\Status_dict.csv'
     print(f'Создан файл со статусами {to_file}.')
@@ -179,7 +177,6 @@ else:
     print(f'Время обработки, создания и записи файла составило: {convert_time(time.time() - status_time)}')
     print()
 
-
     print(f'Создание словаря с технической возможностью начато в: {time.strftime("%X")}.')
     now_time = time.time()
     # Создание словаря "Нет технической возможности".
@@ -209,7 +206,6 @@ else:
 
     print(f'Ушло времени: {convert_time(time.time() - status_time)}')
     print()
-
 
     print(f'Открытие файлов начато в: {time.strftime("%X")}.')
     report.write(f'Открытие файлов начато в: {time.strftime("%X")}.\n')
@@ -288,7 +284,6 @@ else:
     report.write(f'Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
 
-
     pd.options.mode.chained_assignment = None
 
     host, user, password = connect_db('Click')
@@ -311,7 +306,6 @@ else:
     print(f'Ушло времени: {convert_time(time.time() - now_time)}')
     report.write(f'Файл занесен в БД. Ушло времени: {convert_time(time.time() - now_time)}\n')
     print()
-
 
     print(f'Чтение файла My_request.csv начато в: {time.strftime("%X")}.')
     report.write(f'Чтение файла My_request.csv начато в: {time.strftime("%X")}.\n')
