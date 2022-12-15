@@ -36,6 +36,7 @@ select calls.id,
        calls.user_call,
        if((ws.supervisor in ('', ' ') or ws.supervisor is null), 'unknown_id', ws.supervisor) as super,
        calls.result_call_c,
-       calls.otkaz_c
+       calls.otkaz_c,
+       calls.city
 from calls
          left join ws on calls.user_call = ws.id_user;
