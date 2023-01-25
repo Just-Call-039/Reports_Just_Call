@@ -8,6 +8,8 @@ from calendar import monthrange
 
 tqdm.pandas()
 
+pd.options.mode.chained_assignment = None
+
 start_time = time.time()
 
 path = r'D:\Отчеты\категории_номеров\files\\'
@@ -16,8 +18,11 @@ my_connect = pymysql.Connect(host="192.168.1.128", user="base_dep_slave", passwd
                              db="suitecrm",
                              charset='utf8')
 
-for req_year in range(2016, 2017):
-    for i in range(1, 2):
+client_click = Client(host='192.168.1.99', port='9000', user='default', password='jdfwl6812hwe',
+                      database='suitecrm_robot_ch', settings={'use_numpy': True})
+
+for req_year in range(2016, 2024):
+    for i in range(1, 13):
         time_1 = time.time()
 
         req_month = i
@@ -414,10 +419,17 @@ for req_year in range(2016, 2017):
         """
 
         df = pd.read_sql_query(sql, my_connect)
+
+        df.fillna('unknown', inplace=True)
+        df.replace(r'\N', 'unknown', inplace=True)
+
         df_to_file = f'{req_month}_{req_year}.csv'
         full_path = f'{path}{df_to_file}'
-
         df.to_csv(full_path, index=False, sep=';', encoding='utf-8')
+
+        client_click.insert_dataframe('INSERT INTO suitecrm_robot_ch.all_requests VALUES',
+                                      df[['phone_request', 'user', 'status', 'request_date', 'uniqueid',
+                                          'ochered', 'phone', 'project']])
 
         time_2 = time.time()
         #         print(sql)
