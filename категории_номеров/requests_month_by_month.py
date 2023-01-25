@@ -10,14 +10,14 @@ tqdm.pandas()
 
 start_time = time.time()
 
-path = r'D:\Отчеты\категории_номеров\files\\'
+path = r'D:\РћС‚С‡РµС‚С‹\РєР°С‚РµРіРѕСЂРёРё_РЅРѕРјРµСЂРѕРІ\files\\'
 
 my_connect = pymysql.Connect(host="192.168.1.128", user="base_dep_slave", passwd="QxPGHGdzCLao",
                              db="suitecrm",
                              charset='utf8')
 
 for req_year in range(2016, 2017):
-    for i in range(1, 13):
+    for i in range(1, 2):
         time_1 = time.time()
 
         req_month = i
@@ -422,5 +422,9 @@ for req_year in range(2016, 2017):
         time_2 = time.time()
         #         print(sql)
         #         print(df.head())
-        print(f'Обработан: {df_to_file}')
-        print(f'Ушло времени: {round(time_2 - time_1, 3)} сек.')
+        print(f'РћР±СЂР°Р±РѕС‚Р°РЅ: {df_to_file}')
+        print(f'РЈС€Р»Рѕ РІСЂРµРјРµРЅРё: {round(time_2 - time_1, 3)} СЃРµРє.')
+
+end_time = time.time()
+print()
+print(f'РЈС€Р»Рѕ РІСЂРµРјРµРЅРё РЅР° РІСЃРµ С„Р°Р№Р»С‹: {round(end_time - start_time, 3)} СЃРµРє.')
