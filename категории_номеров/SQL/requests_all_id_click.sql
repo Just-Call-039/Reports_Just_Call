@@ -5,8 +5,8 @@ with temp_robot as (select *
                                  phone,
                                  row_number() over (partition by phone order by toDate(call_date) desc) as num
                           from suitecrm_robot_ch.jc_robot_log
-                          where toMonth(call_date) between 10 and 12
-                            and toYear(call_date) = 2022) as temp
+                          where toDate(call_date) between toDate('2022-12-01') - interval 2 month
+                                    and toDate('2022-12-01') + interval 1 month - interval 1 day) as temp
                     where temp.num = 1),
      temp_requests as (select *
                        from suitecrm_robot_ch.all_requests
