@@ -22,3 +22,5 @@ CREATE TABLE suitecrm_robot_ch.all_requests_id
     uniqueid      String
 ) ENGINE = MergeTree()
       order by phone_request;
+
+-- drop table suitecrm_robot_ch.all_requests_id;
