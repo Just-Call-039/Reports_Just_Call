@@ -25,3 +25,6 @@ from suitecrm_robot_ch.all_requests_id;
 select count(1)
 from suitecrm_robot_ch.all_requests_id
 where toDate(request_date) >= '2021-07-01';
+
+select *, if(ptv not in ('', ' '), ptv, region)
+from suitecrm_robot_ch.phone_category_total;
