@@ -9,4 +9,5 @@ select uniqueid,
        region_c
 from suitecrm_robot.jc_robot_log
 where month(call_date) = 1
-  and year(call_date) = 2023;
+  and year(call_date) = 2023
+  and last_step not in ('0', '1', '111', '261', '262');

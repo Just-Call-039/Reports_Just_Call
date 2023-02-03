@@ -28,3 +28,17 @@ where toDate(request_date) >= '2021-07-01';
 
 select *, if(ptv not in ('', ' '), ptv, region)
 from suitecrm_robot_ch.phone_category_total;
+
+select count(1)
+from suitecrm_robot_ch.phone_category_total_check;
+
+select sum(is_request)
+from suitecrm_robot_ch.phone_category_total_check;
+
+select count(1)
+from suitecrm_robot_ch.phone_category_total
+where call_date between '2023-01-01' and '2023-01-29';
+
+select count(1)
+from suitecrm_robot_ch.phone_category_total_check
+where call_date between '2023-01-01' and '2023-01-29';
