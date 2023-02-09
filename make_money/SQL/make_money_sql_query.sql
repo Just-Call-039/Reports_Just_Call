@@ -5,7 +5,7 @@ with temp_calls as (select cl_c.asterisk_caller_id_c as phone,
                     from suitecrm.calls as cl
                              left join suitecrm.calls_cstm as cl_c on cl.id = cl_c.id_c
                     where direction = 'Inbound'
-                      and date(date_entered) >= date(now()) - interval 1 day
+                      and date(date_entered) = date(now()) - interval 1 day
                       and result_call_c = 'refusing'
                       and otkaz_c in ('otkaz_23', 'otkaz_42', 'no_ansver')
                       and duration_minutes <= 10),
