@@ -5,10 +5,9 @@
       <excludeFolder url="file://$MODULE_DIR$/venv" />
       <excludeFolder url="file://$MODULE_DIR$/not_share" />
     </content>
-    <orderEntry type="jdk" jdkName="Python 3.10 (Отчеты)" jdkType="Python SDK" />
+    <orderEntry type="jdk" jdkName="Python 3.11 (Отчеты)" jdkType="Python SDK" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="module" module-name="Python" />
-    <orderEntry type="module" module-name="Power BI" />
     <orderEntry type="module" module-name="PycharmProjects" />
   </component>
 </module>
