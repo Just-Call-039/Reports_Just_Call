@@ -16,6 +16,7 @@ new_file = r'D:\test_new.csv'
 df = pd.read_csv(path, sep=';')
 df.fillna('unknown', inplace=True)
 df['route'] = df['route'].apply(is_number_route)
+df_new = df.explode('route')
 
 print(df.head())
 print(df.info())
@@ -23,4 +24,7 @@ print(df.shape)
 print(df['route'])
 
 df.to_csv(new_file, sep=';', index=False)
+df_new.to_csv(r'D:\wtf.csv', sep=';', index=False)
 print('-' * 50)
+
+print(df_new.head())
