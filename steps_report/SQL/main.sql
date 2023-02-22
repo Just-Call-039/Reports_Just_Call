@@ -13,4 +13,4 @@ select phone,
        region_c
 from suitecrm_robot.jc_robot_log
 where date(call_date) = '2023-02-20'
-limit 1000;
+limit 10000;
