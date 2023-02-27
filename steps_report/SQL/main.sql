@@ -1,5 +1,5 @@
 select phone,
-       date(call_date) as call_date,
+       date(call_date)          as call_date,
        route,
        last_step,
        uniqueid,
@@ -12,5 +12,4 @@ select phone,
        city_c,
        region_c
 from suitecrm_robot.jc_robot_log
-where date(call_date) = '2023-02-26'
-limit 10000;
+where date(call_date) = '2023-02-26';
