@@ -18,9 +18,7 @@ def medium_step(my_str):
 
 
 def reset_step(my_str):
-    if len(my_str) == 1:
-        return my_str[0]
-    elif len(my_str) == 0:
+    if len(my_str) == 0:
         return 'empty'
     else:
         return my_str[-1]
@@ -28,12 +26,12 @@ def reset_step(my_str):
 
 # path = r'D:\test.csv'
 # new_file = r'D:\test_new.csv'
-files_from_sql = r'D:\Отчеты\steps_report\files_from_sql'
-files_to_report = r'D:\Отчеты\steps_report\files_to_report'
+files_from_sql = r'D:\Отчеты\steps_report\files\files_from_sql'
+files_to_report = r'D:\Отчеты\steps_report\files\files_to_report'
 main_calls = rf'{files_from_sql}\main_calls.csv'
 calls_to_report = rf'{files_to_report}\main_calls.csv'
 
-df = pd.read_csv(main_calls, sep=';')
+df = pd.read_csv(main_calls, sep=';', encoding='utf-8')
 df.fillna('unknown', inplace=True)
 df['route'] = df['route'].apply(is_number_route)
 df['medium_step'] = df['route'].apply(medium_step)
@@ -41,7 +39,7 @@ df['reset_step'] = df['route'].apply(reset_step)
 df = df.explode('medium_step')
 # df_new = df.explode('route')
 
-df.to_csv(calls_to_report, sep=';', index=False)
+df.to_csv(calls_to_report, sep=';', index=False, encoding='utf-8')
 
 print(df.head())
 print(df.info())
