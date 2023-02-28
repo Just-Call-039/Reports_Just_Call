@@ -88,7 +88,7 @@ with calls as (select phone,
                       city_c,
                       region_c
                from suitecrm_robot.jc_robot_log
-               where date(call_date) = '2023-02-26')
+               where date(call_date) = date(now()) - interval 1 day)
 
 select phone,
        call_date,

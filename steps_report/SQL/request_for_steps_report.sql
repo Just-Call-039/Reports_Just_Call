@@ -7,7 +7,7 @@ with reguest as (select 'RTK'                                 project,
                            concat(8,
                                   right(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
                                                 ''), 10))) as my_phone_work,
-                        date_entered + interval 2 hour     as date,
+                        date(date_entered)                 as date,
                         assigned_user_id,
                         status
                  from suitecrm.jc_meetings_rostelecom
@@ -23,7 +23,7 @@ with reguest as (select 'RTK'                                 project,
                            concat(8,
                                   right(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
                                                 ''), 10))) as my_phone_work,
-                        date_entered + interval 2 hour     as date,
+                        date(date_entered)                 as date,
                         assigned_user_id,
                         status
                  from suitecrm.jc_meetings_beeline
@@ -39,7 +39,7 @@ with reguest as (select 'RTK'                                 project,
                            concat(8,
                                   right(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
                                                 ''), 10))) as my_phone_work,
-                        date_entered + interval 2 hour     as date,
+                        date(date_entered)                 as date,
                         assigned_user_id,
                         status
                  from suitecrm.jc_meetings_domru
@@ -55,7 +55,7 @@ with reguest as (select 'RTK'                                 project,
                            concat(8,
                                   right(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
                                                 ''), 10))) as my_phone_work,
-                        date_entered + interval 2 hour     as date,
+                        date(date_entered)                 as date,
                         assigned_user_id,
                         status
                  from suitecrm.jc_meetings_ttk
@@ -71,7 +71,7 @@ with reguest as (select 'RTK'                                 project,
                            concat(8,
                                   right(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
                                                 ''), 10))) as my_phone_work,
-                        date_entered + interval 2 hour     as date,
+                        date(date_entered)                 as date,
                         assigned_user_id,
                         status
                  from suitecrm.jc_meetings_netbynet
@@ -87,7 +87,7 @@ with reguest as (select 'RTK'                                 project,
                            concat(8,
                                   right(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
                                                 ''), 10))) as my_phone_work,
-                        date_entered + interval 2 hour     as date,
+                        date(date_entered)                 as date,
                         assigned_user_id,
                         status
                  from suitecrm.jc_meetings_mts jc_meetings_mts
@@ -95,7 +95,7 @@ with reguest as (select 'RTK'                                 project,
                    and date(date_entered) = date(now()) - interval 1 day),
 
      new_rob as (select call_date, uniqueid, ochered, phone
-                 from (select call_date + interval 2 hour                                    as call_date,
+                 from (select date(call_date)                                                as call_date,
                               uniqueid,
                               substring(dialog, 11, 4)                                       as ochered,
                               phone,
