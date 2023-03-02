@@ -88,7 +88,8 @@ with calls as (select phone,
                       city_c,
                       region_c
                from suitecrm_robot.jc_robot_log
-               where date(call_date) = date(now()) - interval 1 day)
+               where date(call_date) = date(now()) - interval 1 day
+                 and last_step not in ('0', '1', '111', '261', '262'))
 
 select phone,
        call_date,

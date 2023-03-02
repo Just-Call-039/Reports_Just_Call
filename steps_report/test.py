@@ -28,8 +28,8 @@ def reset_step(my_str):
 # new_file = r'D:\test_new.csv'
 files_from_sql = r'D:\Отчеты\steps_report\files\files_from_sql'
 files_to_report = r'D:\Отчеты\steps_report\files\main_folder'
-main_calls = rf'{files_from_sql}\2023_2_27.csv'
-calls_to_report = rf'{files_to_report}\2023_2_27.csv'
+main_calls = rf'{files_from_sql}\2023_3_1.csv'
+calls_to_report = rf'{files_to_report}\2023_3_1.csv'
 
 df = pd.read_csv(main_calls, sep=';', encoding='utf-8')
 df.fillna('unknown', inplace=True)
