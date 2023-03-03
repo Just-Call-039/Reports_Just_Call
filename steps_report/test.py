@@ -28,8 +28,9 @@ def reset_step(my_str):
 # new_file = r'D:\test_new.csv'
 files_from_sql = r'D:\Отчеты\steps_report\files\files_from_sql'
 files_to_report = r'D:\Отчеты\steps_report\files\main_folder'
-main_calls = rf'{files_from_sql}\2023_3_1.csv'
-calls_to_report = rf'{files_to_report}\2023_3_1.csv'
+main_calls = rf'{files_from_sql}\2023_3_2.csv'
+calls_to_report = rf'{files_to_report}\2023_3_2.csv'
+
 
 df = pd.read_csv(main_calls, sep=';', encoding='utf-8')
 df.fillna('unknown', inplace=True)
@@ -37,6 +38,7 @@ df['route'] = df['route'].apply(is_number_route)
 df['medium_step'] = df['route'].apply(medium_step)
 df['reset_step'] = df['route'].apply(reset_step)
 df = df.explode('medium_step')
+# df['group_uniq_id'] = df.groupby(['uniqueid']).cumcount() + 1
 # df_new = df.explode('route')
 
 df.to_csv(calls_to_report, sep=';', index=False, encoding='utf-8')
