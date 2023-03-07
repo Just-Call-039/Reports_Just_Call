@@ -92,7 +92,7 @@ with calls as (select jcrl.phone,
                           end                       as city_c,
                       jcrl.region_c
                from suitecrm_robot.jc_robot_log as jcrl
-               where date(jcrl.call_date) = date(now()) - interval 1 day
+               where date(jcrl.call_date) = '2023-03-05'
                  and jcrl.last_step not in ('0', '1', '111', '261', '262'))
 
 select phone,
