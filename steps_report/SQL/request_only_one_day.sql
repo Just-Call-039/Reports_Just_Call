@@ -12,7 +12,7 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_rostelecom
                  where status != 'Error'
-                   and date(date_entered) = '2023-03-05'
+                   and date(date_entered) = '2023-03-09'
                  union all
                  select 'Beeline'                             project,
                         if(length(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
@@ -28,7 +28,7 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_beeline
                  where status != 'Error'
-                   and date(date_entered) = '2023-03-05'
+                   and date(date_entered) = '2023-03-09'
                  union all
                  select project,
                         if(length(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
@@ -44,7 +44,7 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_domru
                  where status != 'Error'
-                   and date(date_entered) = '2023-03-05'
+                   and date(date_entered) = '2023-03-09'
                  union all
                  select project,
                         if(length(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
@@ -60,7 +60,7 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_ttk
                  where status != 'Error'
-                   and date(date_entered) = '2023-03-05'
+                   and date(date_entered) = '2023-03-09'
                  union all
                  select 'NBN'                                 project,
                         if(length(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
@@ -76,7 +76,7 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_netbynet
                  where status != 'Error'
-                   and date(date_entered) = '2023-03-05'
+                   and date(date_entered) = '2023-03-09'
                  union all
                  select project,
                         if(length(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
@@ -92,7 +92,7 @@ with reguest as (select 'RTK'                                 project,
                         status
                  from suitecrm.jc_meetings_mts jc_meetings_mts
                  where status != 'Error'
-                   and date(date_entered) = '2023-03-05'),
+                   and date(date_entered) = '2023-03-09'),
 
      new_rob as (select call_date, uniqueid, ochered, phone
                  from (select date(call_date)                                                as call_date,
