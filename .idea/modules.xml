@@ -4,7 +4,9 @@
     <modules>
       <module fileurl="file://$USER_HOME$/PycharmProjects/.idea/PycharmProjects.iml" filepath="$USER_HOME$/PycharmProjects/.idea/PycharmProjects.iml" />
       <module fileurl="file://$PROJECT_DIR$/../Python/.idea/Python.iml" filepath="$PROJECT_DIR$/../Python/.idea/Python.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Python_test/.idea/Python_test.iml" filepath="$PROJECT_DIR$/../Python_test/.idea/Python_test.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/Отчеты.iml" filepath="$PROJECT_DIR$/.idea/Отчеты.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../Test_tasks/.idea/Тестовые задания.iml" filepath="$PROJECT_DIR$/../Test_tasks/.idea/Тестовые задания.iml" />
     </modules>
   </component>
 </project>

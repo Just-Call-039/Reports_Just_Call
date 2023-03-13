@@ -1,4 +1,4 @@
-with reguest as (select 'RTK'                                 project,
+with request as (select 'RTK'                                 project,
                         if(length(replace(replace(replace(replace(phone_work, '-', ''), ')', ''), '(', ''), ' ',
                                           '')) <=
                            10,
@@ -107,9 +107,9 @@ with reguest as (select 'RTK'                                 project,
 select my_phone_work as phone_number,
        assigned_user_id,
        status        as status_request,
-       reguest.date  as date_reguest,
+       request.date  as date_request,
        new_rob.uniqueid,
        new_rob.ochered,
        project
-from reguest
-         left join new_rob on reguest.my_phone_work = new_rob.phone;
+from request
+         left join new_rob on request.my_phone_work = new_rob.phone;
