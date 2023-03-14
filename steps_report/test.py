@@ -33,7 +33,7 @@ files_from_sql = r'D:\Отчеты\steps_report\files\files_from_sql'
 main_folder = r'D:\Отчеты\steps_report\files\main_folder'
 uniqueid_medium_folder = r'D:\Отчеты\steps_report\files\uniqueid_medium_folder'
 
-name = '2023_3_12.csv'
+name = '2023_3_13.csv'
 
 main_calls_raw = rf'{files_from_sql}\{name}'
 main_calls_true = rf'{main_folder}\{name}'
