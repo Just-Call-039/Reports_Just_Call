@@ -1,9 +1,12 @@
 from __future__ import print_function
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
+from clickhouse_driver import Client
+from commons.connect_db import connect_db
 import datetime
 import pandas as pd
 
+# Взято из официальной документации.
 SCOPES = [
     'https://www.googleapis.com/auth/spreadsheets',
     'https://www.googleapis.com/auth/drive'
@@ -27,8 +30,18 @@ values = result.get('values', [])
 
 today = datetime.date.today()
 
-lst = ['Geeks', 'For', 'Geeks', 'is', 'portal', 'for', 'Geeks']
+df = pd.DataFrame(values[1:], index=[i for i in range(len(values) - 1)],
+                  columns=['queue', 'group', 'project'])
 
-df = pd.DataFrame(values[1:], index=[today for _ in range(len(values) - 1)],
-                  columns=['Очередь', 'Группировка', 'Проект (набирающая очередь)'])
+df['date_add'] = today
+
 print(df)
+
+pd.options.mode.chained_assignment = None
+
+host, user, password = connect_db('Click')
+client = Client(host=host, port='9000', user=user, password=password,
+                database='suitecrm_robot_ch', settings={'use_numpy': True})
+
+client.insert_dataframe('INSERT INTO suitecrm_robot_ch.grouping_of_queues VALUES',
+                        df[['date_add', 'queue', 'group', 'project']])
