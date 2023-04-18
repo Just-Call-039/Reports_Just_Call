@@ -91,6 +91,7 @@ select jc_rl.call_date,
        phone_category.category,
        jc_rl.ptv,
        jc_rl.region,
+       if(jc_rl.ptv not in ('', ' '), jc_rl.ptv, jc_rl.region) as markup,
        requests.request_date,
        requests.phone_request
 from jc_rl

@@ -5,6 +5,7 @@ CREATE TABLE suitecrm_robot_ch.phone_category_total
     category      Int32,
     ptv           String,
     region        String,
+    markup        String,
     request_date  Date,
     phone_request String
 ) ENGINE = MergeTree()
