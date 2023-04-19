@@ -2,10 +2,9 @@
 <project version="4">
   <component name="SqlDialectMappings">
     <file url="file://$PROJECT_DIR$/Отчет_25/Delete_from_clickhouse.py" dialect="ClickHouse" />
+    <file url="file://$PROJECT_DIR$/Отчет_25/SQL/Dataset_25_otchet.sql" dialect="ClickHouse" />
     <file url="file://$PROJECT_DIR$/Отчет_25/SQL/Status.sql" dialect="GenericSQL" />
     <file url="file://$PROJECT_DIR$/категории_номеров/SQL/create_table_all_requests.sql" dialect="ClickHouse" />
-    <file url="file://$PROJECT_DIR$/категории_номеров/SQL/create_table_phone_category.sql" dialect="ClickHouse" />
-    <file url="file://$PROJECT_DIR$/категории_номеров/SQL/phone_category_table.sql" dialect="ClickHouse" />
     <file url="file://$PROJECT_DIR$/категории_номеров/SQL/Итоговая таблица для отчета.sql" dialect="ClickHouse" />
     <file url="file://$PROJECT_DIR$/категории_номеров/SQL/Создание итоговой таблицы.sql" dialect="ClickHouse" />
   </component>
